@@ -67,18 +67,21 @@ public class SpriteView extends DrawView {
             iterator = list.iterator();
             while (iterator.hasNext()) {
                 s = iterator.next();
+                if (listener.equals(s)) {
+                    continue;
+                }
                 if (s instanceof InterfaceSpriteMaterial) {
                     material = (InterfaceSpriteMaterial) s;
-                    // !(1x2 < 2x1 || 1x1 > 2x2 || 1y2 < 2y1 || 1y1 > 2y2)
-                    if (!(
-                            listener.getX() + listener.getWidth() < material.getX()
-                            || listener.getX() > material.getX() + material.getWidth()
-                            || listener.getY() + listener.getHeight() < material.getY()
-                            || listener.getY() > material.getY() + material.getHeight()
-                    )) {
-                        if (!listener.onCollision(material)) {
-                            return;
-                        }
+                    // 1x2 < 2x1 || 1x1 > 2x2
+                    if ((listener.getX() + listener.getWidth() < material.getX() || listener.getX() > material.getX() + material.getWidth())) {
+                        continue;
+                    }
+                    // 1y2 < 2y1 || 1y1 > 2y2
+                    if ((listener.getY() + listener.getHeight() < material.getY() || listener.getY() > material.getY() + material.getHeight())) {
+                        continue;
+                    }
+                    if (!listener.onCollision(material)) {
+                        return;
                     }
                 }
             }
