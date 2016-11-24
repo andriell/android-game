@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -13,16 +13,17 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.andriell.mygame.base.SpriteColor;
-import com.andriell.mygame.base.InterfaceSpriteMaterial;
-import com.andriell.mygame.base.SpriteView;
+import com.andriell.mygame.base.DrawSprite;
 import com.andriell.mygame.game.Bullet;
 import com.andriell.mygame.game.Monster;
+import com.andriell.mygame.game.Player;
 
 public class MainActivity extends Activity {
 
     Bitmap bitmapPlayer;
     Bitmap bitmapBullet;
     Bitmap bitmapMonster;
+    Player player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,32 +44,31 @@ public class MainActivity extends Activity {
         bitmapMonster = BitmapFactory.decodeResource(getResources(), R.drawable.monster);
         bitmapMonster = Bitmap.createScaledBitmap(bitmapMonster, (int) (bitmapMonster.getWidth() / 1.5), (int) (bitmapMonster.getHeight() / 1.5), true);
 
-        SpriteView spriteView = new SpriteView(this, 2) {
+        Point displaySize = new Point();
+        getWindowManager().getDefaultDisplay().getSize(displaySize);
+
+        player = new Player(bitmapPlayer, 100, displaySize.y / 2);
+
+        DrawSprite drawSprite = new DrawSprite(this, 2) {
             public boolean onTouchEvent(MotionEvent e)
             {
                 Log.i("SpriteView", "onTouchEvent");
-                addSprite(1, new Bullet(bitmapBullet, 100, 100, 3, 0));
+
+                double angle = Math.atan((double)(player.getCenterY() - e.getY()) / (player.getCenterX() - e.getX()));
+                int speedX = (int) (10 * Math.cos(angle));
+                int speedY = (int) (10 * Math.sin(angle));
+
+                addSprite(1, new Bullet(bitmapBullet, player.getCenterX(), player.getCenterY(), speedX, speedY));
                 addSprite(1, new Monster(bitmapMonster, 1000, 100, -3, 0));
                 return true;
             }
         };
-        spriteView.addSprite(0, new SpriteColor(Color.WHITE));
-        /*spriteView.addSprite(1, new InterfaceSpriteMaterial() {
-            private int[] xyxy = {100, 100, bitmapPlayer.getHeight() + 100, bitmapPlayer.getWidth() + 100};
+        drawSprite.addSprite(0, new SpriteColor(Color.WHITE));
 
-            @Override
-            public int[] getXYXY() {
-                return xyxy;
-            }
+        drawSprite.addSprite(1, player);
 
-            @Override
-            public boolean onDraw(Canvas c) {
-                c.drawBitmap(bitmapPlayer, xyxy[0], xyxy[1], null);
-                return true;
-            }
-        });*/
 
-        setContentView(spriteView);
+        setContentView(drawSprite);
     }
 
 

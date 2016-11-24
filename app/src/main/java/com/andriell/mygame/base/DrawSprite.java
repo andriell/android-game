@@ -12,46 +12,54 @@ import java.util.List;
  * Created by Rybalko on 24.11.2016.
  */
 
-public class SpriteView extends DrawView {
+public class DrawSprite extends DrawView {
     private List<InterfaceSprite>[] sprites;
+    private List<InterfaceSprite>[] spritesNew;
 
-    public SpriteView(Context context, int zSize) {
+    public DrawSprite(Context context, int zSize) {
         super(context);
         sprites = new ArrayList[zSize];
+        spritesNew = new ArrayList[zSize];
+        for (int i = 0; i < zSize; i++) {
+            sprites[i] = new ArrayList<InterfaceSprite>();
+            spritesNew[i] = new ArrayList<InterfaceSprite>();
+        }
     }
 
     public void addSprite(int z, InterfaceSprite sprite) {
         if (z < 0 || z >= sprites.length) {
             return;
         }
-        if (sprites[z] == null) {
-            sprites[z] = new ArrayList<InterfaceSprite>();
-        }
-        sprites[z].add(sprite);
+        spritesNew[z].add(sprite);
     }
 
     @Override
     protected void myDraw(Canvas canvas) {
         Iterator<InterfaceSprite> iterator;
         InterfaceSprite s;
-        for (List<InterfaceSprite> list : sprites) {
-            if (list == null) {
-                continue;
-            }
-            try {
-                iterator = list.iterator();
-                while (iterator.hasNext()) {
-                    s = iterator.next();
-                    if (s instanceof InterfaceSpriteCollisionListener) {
-                        testCollision((InterfaceSpriteCollisionListener) s);
+
+        synchronized (this) {
+            for (int i = 0; i < sprites.length; i++) {
+                try {
+                    iterator = sprites[i].iterator();
+                    while (iterator.hasNext()) {
+                        s = iterator.next();
+                        if (s instanceof InterfaceSpriteCollisionListener) {
+                            testCollision((InterfaceSpriteCollisionListener) s);
+                        }
+                        if (!s.onDraw(canvas)) {
+                            Log.i("SpriteView", "InterfaceSprite remove");
+                            iterator.remove();
+                        }
                     }
-                    if (!s.onDraw(canvas)) {
-                        Log.i("SpriteView", "InterfaceSprite remove");
-                        iterator.remove();
-                    }
+                } catch (Exception e) {
+                    Log.e("SpriteView", "iterator error", e);
                 }
-            } catch (Exception e) {
-                Log.d("SpriteView", "list error", e);
+            }
+
+            for (int i = 0; i < sprites.length; i++) {
+                sprites[i].addAll(spritesNew[i]);
+                spritesNew[i].clear();
             }
         }
     }

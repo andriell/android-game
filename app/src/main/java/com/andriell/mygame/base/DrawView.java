@@ -64,7 +64,9 @@ public abstract class DrawView extends SurfaceView {
                         Log.e("GameView", "onDraw canvas == null");
                         return;
                     }
-                    myDraw(canvas);
+                    synchronized (surfaceHolder) {
+                        myDraw(canvas);
+                    }
                 } finally {
                     if (canvas != null) {
                         surfaceHolder.unlockCanvasAndPost(canvas);
