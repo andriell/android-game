@@ -26,7 +26,7 @@ public class Monster extends SpriteRunner implements InterfaceSpriteCollisionLis
             ((Bullet) sprite).setDead();
             Log.i("Monster", "is dead");
         }
-        return isDead;
+        return !isDead;
     }
 
     @Override

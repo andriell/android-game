@@ -52,6 +52,10 @@ public class MainActivity extends Activity {
         DrawSprite drawSprite = new DrawSprite(this, 2) {
             public boolean onTouchEvent(MotionEvent e)
             {
+                if(e.getAction() != MotionEvent.ACTION_DOWN) {
+                    return true;
+                }
+
                 Log.i("SpriteView", "onTouchEvent");
 
                 double angle = Math.atan((double)(player.getCenterY() - e.getY()) / (player.getCenterX() - e.getX()));

@@ -20,6 +20,6 @@ public class SpriteBitmap extends SpriteMaterial {
     @Override
     public boolean onDraw(Canvas c) {
         c.drawBitmap(bitmap, x, y, null);
-        return super.onDraw(c);
+        return !(width + x < 0 || height + y < 0 || x > c.getWidth() || y > c.getHeight());
     }
 }
