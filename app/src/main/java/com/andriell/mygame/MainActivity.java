@@ -47,8 +47,8 @@ public class MainActivity extends Activity {
             public boolean onTouchEvent(MotionEvent e)
             {
                 Log.i("SpriteView", "onTouchEvent");
-                addSprite(1, new Bullet(bitmapBullet, 100, 100, 10, 0));
-                addSprite(1, new Monster(bitmapMonster, 1000, 100, -10, 0));
+                addSprite(1, new Bullet(bitmapBullet, 100, 100, 3, 0));
+                addSprite(1, new Monster(bitmapMonster, 1000, 100, -3, 0));
                 return true;
             }
         };
