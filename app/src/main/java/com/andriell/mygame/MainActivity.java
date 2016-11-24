@@ -13,7 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.andriell.mygame.base.SpriteColor;
-import com.andriell.mygame.base.SpriteMaterial;
+import com.andriell.mygame.base.InterfaceSpriteMaterial;
 import com.andriell.mygame.base.SpriteView;
 import com.andriell.mygame.game.Bullet;
 import com.andriell.mygame.game.Monster;
@@ -47,13 +47,13 @@ public class MainActivity extends Activity {
             public boolean onTouchEvent(MotionEvent e)
             {
                 Log.i("SpriteView", "onTouchEvent");
-                addSprite(1, new Bullet(bitmapBullet, new int[] {100, 100}, new int[] {(int) e.getX(), (int) e.getY()}, 25));
-                addSprite(1, new Monster(bitmapMonster, new int[] {800, 300}, 1));
+                addSprite(1, new Bullet(bitmapBullet, 100, 100, 10, 0));
+                addSprite(1, new Monster(bitmapMonster, 1000, 100, -10, 0));
                 return true;
             }
         };
         spriteView.addSprite(0, new SpriteColor(Color.WHITE));
-        spriteView.addSprite(1, new SpriteMaterial() {
+        /*spriteView.addSprite(1, new InterfaceSpriteMaterial() {
             private int[] xyxy = {100, 100, bitmapPlayer.getHeight() + 100, bitmapPlayer.getWidth() + 100};
 
             @Override
@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
                 c.drawBitmap(bitmapPlayer, xyxy[0], xyxy[1], null);
                 return true;
             }
-        });
+        });*/
 
         setContentView(spriteView);
     }

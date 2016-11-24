@@ -6,7 +6,7 @@ import android.graphics.Canvas;
  * Created by Rybalko on 24.11.2016.
  */
 
-public class SpriteColor implements Sprite {
+public class SpriteColor implements InterfaceSprite {
     int color;
 
     public SpriteColor(int color) {
