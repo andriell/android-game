@@ -8,7 +8,7 @@ public class SpriteBitmap extends SpriteMaterial {
     Bitmap bitmap;
 
     public SpriteBitmap(Bitmap bitmap, int x, int y) {
-        super(x, y);
+        super(x, y, bitmap.getWidth(), bitmap.getHeight());
         this.bitmap = bitmap;
     }
 

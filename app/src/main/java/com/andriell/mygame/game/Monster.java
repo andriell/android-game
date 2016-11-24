@@ -17,6 +17,9 @@ public class Monster extends SpriteRunner implements InterfaceSpriteCollisionLis
 
     @Override
     public boolean onCollision(InterfaceSpriteMaterial sprite) {
+        if (isDead) {
+            return false;
+        }
         isDead = sprite instanceof Bullet;
         Log.i("Monster", "Collision");
         if (isDead) {
