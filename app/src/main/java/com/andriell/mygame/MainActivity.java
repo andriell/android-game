@@ -7,17 +7,21 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.andriell.mygame.base.SpriteColor;
 import com.andriell.mygame.base.SpriteMaterial;
 import com.andriell.mygame.base.SpriteView;
+import com.andriell.mygame.game.Bullet;
 
 public class MainActivity extends Activity {
 
     Bitmap bitmapPlayer;
     Bitmap bitmapBullet;
+    Bitmap bitmapMonster;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +39,18 @@ public class MainActivity extends Activity {
         bitmapBullet = BitmapFactory.decodeResource(getResources(), R.drawable.bullet);
         bitmapBullet = Bitmap.createScaledBitmap(bitmapBullet, bitmapBullet.getWidth() / 8, bitmapBullet.getHeight() / 8, true);
 
+        bitmapMonster = BitmapFactory.decodeResource(getResources(), R.drawable.monster);
+        bitmapMonster = Bitmap.createScaledBitmap(bitmapMonster, (int) (bitmapMonster.getWidth() / 1.5), (int) (bitmapMonster.getHeight() / 1.5), true);
 
-        SpriteView spriteView = new SpriteView(this, 2);
+        SpriteView spriteView = new SpriteView(this, 2) {
+            public boolean onTouchEvent(MotionEvent e)
+            {
+                Log.i("SpriteView", "onTouchEvent");
+                addSprite(1, new Bullet(bitmapBullet, new int[] {100, 100}, new int[] {(int) e.getX(), (int) e.getY()}, 25));
+
+                return true;
+            }
+        };
         spriteView.addSprite(0, new SpriteColor(Color.WHITE));
         spriteView.addSprite(1, new SpriteMaterial() {
             private int[] xyxy = {100, 100, bitmapPlayer.getHeight() + 100, bitmapPlayer.getWidth() + 100};
@@ -53,8 +67,11 @@ public class MainActivity extends Activity {
             }
         });
 
+
+
         spriteView.addSprite(1, new SpriteMaterial() {
-            private int[] xyxy = {500, 500, bitmapBullet.getHeight() + 500, bitmapBullet.getWidth() + 500};
+            private int[] hw = {bitmapMonster.getHeight(), bitmapMonster.getWidth()};
+            private int[] xyxy = {600, 100, 0, 0};
 
             @Override
             public int[] getXYXY() {
@@ -63,7 +80,7 @@ public class MainActivity extends Activity {
 
             @Override
             public boolean onDraw(Canvas c) {
-                c.drawBitmap(bitmapBullet, xyxy[0], xyxy[1], null);
+                c.drawBitmap(bitmapMonster, xyxy[0], xyxy[1], null);
                 return true;
             }
         });
@@ -71,4 +88,8 @@ public class MainActivity extends Activity {
 
         setContentView(spriteView);
     }
+
+
+
+
 }
