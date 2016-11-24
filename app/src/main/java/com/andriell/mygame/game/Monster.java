@@ -41,12 +41,13 @@ public class Monster implements SpriteCollisionListener {
     public boolean onDraw(Canvas c) {
         //update();
         c.drawBitmap(bitmap, xyxy[0], xyxy[1], null);
-        return live && xyxy[0] < c.getHeight() && xyxy[1] < c.getWidth();
+        return true;
     }
 
     @Override
     public boolean onCollision(SpriteMaterial sprite) {
         live = ! (sprite instanceof Bullet);
+        Log.i("Monster", "Collision");
         if (!live) {
             Log.i("Monster", "is dead");
         }
