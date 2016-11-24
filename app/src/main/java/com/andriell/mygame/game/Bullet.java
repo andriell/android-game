@@ -44,6 +44,6 @@ public class Bullet implements SpriteMaterial {
     public boolean onDraw(Canvas c) {
         update();
         c.drawBitmap(bitmap, xyxy[0], xyxy[1], null);
-        return true;
+        return xyxy[0] < c.getHeight() && xyxy[1] < c.getWidth();
     }
 }
