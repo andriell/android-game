@@ -81,7 +81,7 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 drawSprite.addSprite(1, new Monster(bitmapMonster, displaySize.x - bitmapMonster.getWidth(), rnd.nextInt(displaySize.y - bitmapMonster.getHeight()), -3, 0));
-                handler.postDelayed(this, rnd.nextInt(2000));
+                handler.postDelayed(this, rnd.nextInt(1000));
             }
         });
     }
