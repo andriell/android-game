@@ -79,7 +79,7 @@ public class MainActivity extends Activity {
 
         drawSprite.addSprite(1, player);
 
-        count = new Count(30, 30);
+        count = new Count(displaySize.x / 2, 30);
         drawSprite.addSprite(1, count);
 
         setContentView(drawSprite);

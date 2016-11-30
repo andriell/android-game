@@ -7,17 +7,21 @@ import android.graphics.Paint;
  * Created by Андрей on 30.11.2016.
  */
 
-public class SpriteText extends SpriteMaterial {
+public class SpriteText implements InterfaceSprite  {
     private Paint paint;
     private String text = "";
+    private int x;
+    private int y;
 
     public SpriteText(Paint paint, int x, int y) {
-        super(x, y);
+        this.x = x;
+        this.y = y;
         this.paint = paint;
     }
 
     public SpriteText(int x, int y) {
-        super(x, y);
+        this.x = x;
+        this.y = y;
         paint = new Paint();
     }
 
@@ -40,7 +44,7 @@ public class SpriteText extends SpriteMaterial {
 
     @Override
     public boolean onDraw(Canvas c) {
-        c.drawText(text, x, x, paint);
+        c.drawText(text, x, y, paint);
         return true;
     }
 }
