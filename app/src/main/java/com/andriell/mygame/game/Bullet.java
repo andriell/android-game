@@ -28,4 +28,8 @@ public class Bullet extends SpriteRunner {
         }
         return super.onDraw(c);
     }
+
+    public boolean isDead() {
+        return isDead;
+    }
 }

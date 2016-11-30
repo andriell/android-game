@@ -20,13 +20,19 @@ public class Monster extends SpriteRunner implements InterfaceSpriteCollisionLis
         if (isDead) {
             return false;
         }
-        isDead = sprite instanceof Bullet;
-        Log.i("Monster", "Collision");
-        if (isDead) {
-            ((Bullet) sprite).setDead();
-            Log.i("Monster", "is dead");
+
+        if (sprite instanceof Bullet) {
+            Bullet bullet = (Bullet) sprite;
+            if (bullet.isDead()) {
+                return true;
+            } else {
+                bullet.setDead();
+                isDead = true;
+                return false;
+            }
         }
-        return !isDead;
+
+        return true;
     }
 
     @Override
