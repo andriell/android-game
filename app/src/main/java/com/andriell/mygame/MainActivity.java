@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Window;
@@ -18,12 +19,18 @@ import com.andriell.mygame.game.Bullet;
 import com.andriell.mygame.game.Monster;
 import com.andriell.mygame.game.Player;
 
+import java.util.Random;
+
 public class MainActivity extends Activity {
 
     Bitmap bitmapPlayer;
     Bitmap bitmapBullet;
     Bitmap bitmapMonster;
     Player player;
+    DrawSprite drawSprite;
+    Random rnd = new Random();
+    Handler handler = new Handler();
+    Point displaySize = new Point();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,20 +43,19 @@ public class MainActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         bitmapPlayer = BitmapFactory.decodeResource(getResources(), R.drawable.player);
-        bitmapPlayer = Bitmap.createScaledBitmap(bitmapPlayer, bitmapPlayer.getWidth() / 2, bitmapPlayer.getHeight() / 2, true);
+        bitmapPlayer = Bitmap.createScaledBitmap(bitmapPlayer, bitmapPlayer.getWidth() / 4, bitmapPlayer.getHeight() / 4, true);
 
         bitmapBullet = BitmapFactory.decodeResource(getResources(), R.drawable.bullet);
-        bitmapBullet = Bitmap.createScaledBitmap(bitmapBullet, bitmapBullet.getWidth() / 8, bitmapBullet.getHeight() / 8, true);
+        bitmapBullet = Bitmap.createScaledBitmap(bitmapBullet, bitmapBullet.getWidth() / 16, bitmapBullet.getHeight() / 16, true);
 
         bitmapMonster = BitmapFactory.decodeResource(getResources(), R.drawable.monster);
-        bitmapMonster = Bitmap.createScaledBitmap(bitmapMonster, (int) (bitmapMonster.getWidth() / 1.5), (int) (bitmapMonster.getHeight() / 1.5), true);
+        bitmapMonster = Bitmap.createScaledBitmap(bitmapMonster, (int) (bitmapMonster.getWidth() / 3), (int) (bitmapMonster.getHeight() / 3), true);
 
-        Point displaySize = new Point();
         getWindowManager().getDefaultDisplay().getSize(displaySize);
 
         player = new Player(bitmapPlayer, 100, displaySize.y / 2);
 
-        DrawSprite drawSprite = new DrawSprite(this, 2) {
+        drawSprite = new DrawSprite(this, 2) {
             public boolean onTouchEvent(MotionEvent e)
             {
                 if(e.getAction() != MotionEvent.ACTION_DOWN) {
@@ -63,7 +69,6 @@ public class MainActivity extends Activity {
                 int speedY = (int) (10 * Math.sin(angle));
 
                 addSprite(1, new Bullet(bitmapBullet, player.getCenterX(), player.getCenterY(), speedX, speedY));
-                addSprite(1, new Monster(bitmapMonster, 1000, 100, -3, 0));
                 return true;
             }
         };
@@ -71,11 +76,13 @@ public class MainActivity extends Activity {
 
         drawSprite.addSprite(1, player);
 
-
         setContentView(drawSprite);
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                drawSprite.addSprite(1, new Monster(bitmapMonster, displaySize.x - bitmapMonster.getWidth(), rnd.nextInt(displaySize.y - bitmapMonster.getHeight()), -3, 0));
+                handler.postDelayed(this, rnd.nextInt(2000));
+            }
+        });
     }
-
-
-
-
 }
