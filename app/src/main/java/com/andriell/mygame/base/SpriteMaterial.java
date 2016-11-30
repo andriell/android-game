@@ -1,11 +1,6 @@
 package com.andriell.mygame.base;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-
-/**
- * Created by Андрей on 24.11.2016.
- */
 
 public class SpriteMaterial implements InterfaceSpriteMaterial {
     protected int x;
