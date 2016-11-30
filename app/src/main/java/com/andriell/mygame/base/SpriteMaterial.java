@@ -3,10 +3,10 @@ package com.andriell.mygame.base;
 import android.graphics.Canvas;
 
 public class SpriteMaterial implements InterfaceSpriteMaterial {
-    protected int x;
-    protected int y;
-    protected int width;
-    protected int height;
+    protected int x = 0;
+    protected int y = 0;
+    protected int width = 0;
+    protected int height = 0;
 
 
     public SpriteMaterial(int x, int y) {

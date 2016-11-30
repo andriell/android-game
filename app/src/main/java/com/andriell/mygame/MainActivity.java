@@ -13,9 +13,11 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.andriell.mygame.base.InterfaceSpriteMaterial;
 import com.andriell.mygame.base.SpriteColor;
 import com.andriell.mygame.base.DrawSprite;
 import com.andriell.mygame.game.Bullet;
+import com.andriell.mygame.game.Count;
 import com.andriell.mygame.game.Monster;
 import com.andriell.mygame.game.Player;
 
@@ -31,6 +33,7 @@ public class MainActivity extends Activity {
     Random rnd = new Random();
     Handler handler = new Handler();
     Point displaySize = new Point();
+    Count count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +79,23 @@ public class MainActivity extends Activity {
 
         drawSprite.addSprite(1, player);
 
+        count = new Count(30, 30);
+        drawSprite.addSprite(1, count);
+
         setContentView(drawSprite);
         handler.post(new Runnable() {
             @Override
             public void run() {
-                drawSprite.addSprite(1, new Monster(bitmapMonster, displaySize.x - bitmapMonster.getWidth(), rnd.nextInt(displaySize.y - bitmapMonster.getHeight()), -3, 0));
+                drawSprite.addSprite(1, new Monster(bitmapMonster, displaySize.x - bitmapMonster.getWidth(), rnd.nextInt(displaySize.y - bitmapMonster.getHeight()), -3, 0) {
+                    @Override
+                    public boolean onCollision(InterfaceSpriteMaterial sprite) {
+                        boolean r = super.onCollision(sprite);
+                        if (!r) {
+                            count.count();
+                        }
+                        return r;
+                    }
+                });
                 handler.postDelayed(this, rnd.nextInt(1000));
             }
         });
