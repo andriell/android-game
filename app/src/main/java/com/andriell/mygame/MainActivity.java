@@ -96,7 +96,7 @@ public class MainActivity extends Activity {
                         return r;
                     }
                 });
-                handler.postDelayed(this, rnd.nextInt(1000));
+                handler.postDelayed(this, rnd.nextInt(10000));
             }
         });
     }

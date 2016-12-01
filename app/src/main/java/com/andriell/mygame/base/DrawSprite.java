@@ -5,31 +5,31 @@ import android.graphics.Canvas;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import java.util.ArrayList;
+import java.util.AbstractSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Created by Rybalko on 24.11.2016.
  */
 
 public class DrawSprite extends DrawView {
-    private List<InterfaceSprite>[] sprites;
-    private List<InterfaceSpriteMaterial>[] spritesMaterial;
-    private List<InterfaceSpriteCollisionListener>[] spritesCollision;
-    private List<InterfaceSprite>[] spritesNew;
+    private AbstractSet<InterfaceSprite>[] sprites;
+    private AbstractSet<InterfaceSpriteMaterial> spritesMaterial;
+    private AbstractSet<InterfaceSpriteCollisionListener> spritesCollision;
+    private AbstractSet<InterfaceSpriteTouchListener> spritesTouchListener;
+    private AbstractSet<InterfaceSprite>[] spritesNew;
 
     public DrawSprite(Context context, int zSize) {
         super(context);
-        sprites = new ArrayList[zSize];
-        spritesMaterial = new ArrayList[zSize];
-        spritesCollision = new ArrayList[zSize];
-        spritesNew = new ArrayList[zSize];
+        spritesMaterial = new CopyOnWriteArraySet<InterfaceSpriteMaterial>();
+        spritesCollision = new CopyOnWriteArraySet<InterfaceSpriteCollisionListener>();
+        spritesTouchListener = new CopyOnWriteArraySet<InterfaceSpriteTouchListener>();
+        sprites = new CopyOnWriteArraySet[zSize];
+        spritesNew = new CopyOnWriteArraySet[zSize];
         for (int i = 0; i < zSize; i++) {
-            sprites[i] = new ArrayList<InterfaceSprite>();
-            spritesMaterial[i] = new ArrayList<InterfaceSpriteMaterial>();
-            spritesCollision[i] = new ArrayList<InterfaceSpriteCollisionListener>();
-            spritesNew[i] = new ArrayList<InterfaceSprite>();
+            sprites[i] = new CopyOnWriteArraySet<InterfaceSprite>();
+            spritesNew[i] = new CopyOnWriteArraySet<InterfaceSprite>();
         }
     }
 
@@ -43,11 +43,7 @@ public class DrawSprite extends DrawView {
     @Override
     protected void myDraw(Canvas canvas) {
         Iterator<InterfaceSprite> iterator;
-        Iterator<InterfaceSpriteMaterial> materialIterator;
-        Iterator<InterfaceSpriteCollisionListener> listenerIterator;
         InterfaceSprite s;
-        InterfaceSpriteCollisionListener collisionListener;
-
         synchronized (this) {
             //<editor-fold desc="Рисуем старые спрайты">
             for (int i = 0; i < sprites.length; i++) {
@@ -57,51 +53,59 @@ public class DrawSprite extends DrawView {
                         s = iterator.next();
                         if (!s.onDraw(canvas)) {
                             Log.i("SpriteView", "InterfaceSprite remove");
-                            iterator.remove();
+                            if (s instanceof InterfaceSpriteCollisionListener) {
+                                spritesCollision.remove((InterfaceSpriteCollisionListener) s);
+                            } else if (s instanceof InterfaceSpriteMaterial) {
+                                spritesMaterial.remove((InterfaceSpriteMaterial) s);
+                            }
+                            if (s instanceof InterfaceSpriteTouchListener) {
+                                spritesTouchListener.remove((InterfaceSpriteTouchListener) s);
+                            }
+                            sprites[i].remove(s);
                         }
                     }
                 } catch (Exception e) {
                     Log.e("SpriteView", "InterfaceSprite iterator error", e);
                 }
-                try {
-                    listenerIterator = spritesCollision[i].iterator();
-                    while (listenerIterator.hasNext()) {
-                        collisionListener = listenerIterator.next();
-                        testCollision(collisionListener);
-                        if (!collisionListener.onDraw(canvas)) {
-                            Log.i("SpriteView", "InterfaceSpriteMaterial remove");
-                            listenerIterator.remove();
-                        }
-                    }
-                } catch (Exception e) {
-                    Log.e("SpriteView", "InterfaceSpriteMaterial iterator error", e);
-                }
-                try {
-                    materialIterator = spritesMaterial[i].iterator();
-                    while (materialIterator.hasNext()) {
-                        s = materialIterator.next();
-                        if (!s.onDraw(canvas)) {
-                            Log.i("SpriteView", "InterfaceSpriteCollisionListener remove");
-                            materialIterator.remove();
-                        }
-                    }
-                } catch (Exception e) {
-                    Log.e("SpriteView", "InterfaceSpriteCollisionListener iterator error", e);
-                }
             }
             //</editor-fold>
+
+            try {
+                for (InterfaceSpriteCollisionListener collisionListener : spritesCollision) {
+                    for (InterfaceSpriteMaterial material : spritesMaterial) {
+                        if (collisionListener.equals(material)) {
+                            continue;
+                        }
+                        // 1x2 < 2x1 || 1x1 > 2x2
+                        if ((collisionListener.getX() + collisionListener.getWidth() < material.getX() || collisionListener.getX() > material.getX() + material.getWidth())) {
+                            continue;
+                        }
+                        // 1y2 < 2y1 || 1y1 > 2y2
+                        if ((collisionListener.getY() + collisionListener.getHeight() < material.getY() || collisionListener.getY() > material.getY() + material.getHeight())) {
+                            continue;
+                        }
+                        if (!collisionListener.onCollision(material)) {
+                            return;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.e("SpriteView", "InterfaceSpriteCollisionListener error", e);
+            }
 
             //<editor-fold desc="Добавляем новые спрайты">
             for (int i = 0; i < sprites.length; i++) {
                 iterator = spritesNew[i].iterator();
                 while (iterator.hasNext()) {
                     s = iterator.next();
+                    sprites[i].add(s);
                     if (s instanceof InterfaceSpriteCollisionListener) {
-                        spritesCollision[i].add((InterfaceSpriteCollisionListener) s);
+                        spritesCollision.add((InterfaceSpriteCollisionListener) s);
                     } else if (s instanceof InterfaceSpriteMaterial) {
-                        spritesMaterial[i].add((InterfaceSpriteMaterial) s);
-                    } else {
-                        sprites[i].add(s);
+                        spritesMaterial.add((InterfaceSpriteMaterial) s);
+                    }
+                    if (s instanceof InterfaceSpriteTouchListener) {
+                        spritesTouchListener.add((InterfaceSpriteTouchListener) s);
                     }
                 }
                 spritesNew[i].clear();
@@ -110,34 +114,12 @@ public class DrawSprite extends DrawView {
         }
     }
 
-    protected void testCollision(InterfaceSpriteCollisionListener listener) {
-        Iterator<InterfaceSpriteMaterial> materialIterator;
-        InterfaceSpriteMaterial material;
-
-        for (int i = 0; i < sprites.length; i++) {
-            materialIterator = spritesMaterial[i].iterator();
-            while (materialIterator.hasNext()) {
-                material = materialIterator.next();
-                if (listener.equals(material)) {
-                    continue;
-                }
-                // 1x2 < 2x1 || 1x1 > 2x2
-                if ((listener.getX() + listener.getWidth() < material.getX() || listener.getX() > material.getX() + material.getWidth())) {
-                    continue;
-                }
-                // 1y2 < 2y1 || 1y1 > 2y2
-                if ((listener.getY() + listener.getHeight() < material.getY() || listener.getY() > material.getY() + material.getHeight())) {
-                    continue;
-                }
-                if (!listener.onCollision(material)) {
-                    return;
-                }
+    public boolean onTouchEvent(MotionEvent e) {
+        for (InterfaceSpriteTouchListener touchListener : spritesTouchListener) {
+            if (!touchListener.onTouchEvent(e)) {
+                return false;
             }
         }
-    }
-
-    public boolean onTouchEvent(MotionEvent e)
-    {
         return true;
     }
 }
