@@ -8,7 +8,6 @@ public class SpriteMaterial implements InterfaceSpriteMaterial {
     protected int width = 0;
     protected int height = 0;
 
-
     public SpriteMaterial(int x, int y) {
         this.x = x;
         this.y = y;

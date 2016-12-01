@@ -45,6 +45,21 @@ public class DrawSprite extends DrawView {
         }
     }
 
+    public void removeSprite(int z, InterfaceSprite s) {
+        if (z < 0 || z >= sprites.length) {
+            return;
+        }
+        if (s instanceof InterfaceSpriteCollisionListener) {
+            spritesCollision.remove((InterfaceSpriteCollisionListener) s);
+        } else if (s instanceof InterfaceSpriteMaterial) {
+            spritesMaterial.remove((InterfaceSpriteMaterial) s);
+        }
+        if (s instanceof InterfaceSpriteTouchListener) {
+            spritesTouchListener.remove((InterfaceSpriteTouchListener) s);
+        }
+        sprites[z].remove(s);
+    }
+
     @Override
     protected void myDraw(Canvas canvas) {
         synchronized (this) {
@@ -56,15 +71,7 @@ public class DrawSprite extends DrawView {
                         InterfaceSprite sprite = spriteIterator.next();
                         if (!sprite.onDraw(canvas)) {
                             Log.i("SpriteView", "InterfaceSprite remove");
-                            if (sprite instanceof InterfaceSpriteCollisionListener) {
-                                spritesCollision.remove((InterfaceSpriteCollisionListener) sprite);
-                            } else if (sprite instanceof InterfaceSpriteMaterial) {
-                                spritesMaterial.remove((InterfaceSpriteMaterial) sprite);
-                            }
-                            if (sprite instanceof InterfaceSpriteTouchListener) {
-                                spritesTouchListener.remove((InterfaceSpriteTouchListener) sprite);
-                            }
-                            sprites[i].remove(sprite);
+                            removeSprite(i, sprite);
                         }
                     }
                 } catch (Exception e) {
@@ -129,11 +136,15 @@ public class DrawSprite extends DrawView {
 
     public boolean onTouchEvent(MotionEvent e) {
         Iterator<InterfaceSpriteTouchListener> iterator = spritesTouchListener.iterator();
-        InterfaceSpriteTouchListener touchListener;
+        InterfaceSpriteTouchListener listener;
         while (iterator.hasNext()) {
-            touchListener = iterator.next();
-            if (!touchListener.onTouchEvent(e)) {
-                return false;
+            listener = iterator.next();
+            // x1 <= x <= x2
+            // y1 <= y <= y2
+            if (listener.getX() <= e.getX() && e.getX() <= listener.getX() + listener.getWidth() && listener.getY() <= e.getY() && e.getY() <= listener.getY() + listener.getHeight()) {
+                if (!listener.onTouchEvent(e)) {
+                    return false;
+                }
             }
         }
         return true;

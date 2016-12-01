@@ -14,6 +14,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.andriell.mygame.base.InterfaceSpriteMaterial;
+import com.andriell.mygame.base.SpriteBitmap;
+import com.andriell.mygame.base.SpriteButton;
 import com.andriell.mygame.base.SpriteColor;
 import com.andriell.mygame.base.DrawSprite;
 import com.andriell.mygame.game.Bullet;
@@ -61,6 +63,7 @@ public class MainActivity extends Activity {
         drawSprite = new DrawSprite(this, 2) {
             public boolean onTouchEvent(MotionEvent e)
             {
+                super.onTouchEvent(e);
                 if(e.getAction() != MotionEvent.ACTION_DOWN) {
                     return true;
                 }
@@ -81,6 +84,12 @@ public class MainActivity extends Activity {
 
         count = new Count(displaySize.x / 2, 30);
         drawSprite.addSprite(1, count);
+        drawSprite.addSprite(1, new SpriteButton(bitmapPlayer, bitmapMonster, 100, 100) {
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return true;
+            }
+        });
 
         setContentView(drawSprite);
         handler.post(new Runnable() {
