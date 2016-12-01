@@ -84,12 +84,6 @@ public class MainActivity extends Activity {
 
         count = new Count(displaySize.x / 2, 30);
         drawSprite.addSprite(1, count);
-        drawSprite.addSprite(1, new SpriteButton(bitmapPlayer, bitmapMonster, 100, 100) {
-            @Override
-            public boolean onDown(MotionEvent e) {
-                return true;
-            }
-        });
 
         setContentView(drawSprite);
         handler.post(new Runnable() {
