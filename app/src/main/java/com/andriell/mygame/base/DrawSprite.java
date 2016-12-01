@@ -14,54 +14,80 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 
 public class DrawSprite extends DrawView {
-    private AbstractSet<InterfaceSprite>[] sprites;
-    private AbstractSet<InterfaceSpriteMaterial> spritesMaterial;
-    private AbstractSet<InterfaceSpriteCollisionListener> spritesCollision;
-    private AbstractSet<InterfaceSpriteTouchListener> spritesTouchListener;
-    private AbstractSet<InterfaceSprite>[] spritesNew;
+    private VeryFastSet<InterfaceSprite>[] sprites;
+    private VeryFastSet<InterfaceSpriteMaterial> spritesMaterial;
+    private VeryFastSet<InterfaceSpriteCollisionListener> spritesCollision;
+    private VeryFastSet<InterfaceSpriteTouchListener> spritesTouchListener;
 
     public DrawSprite(Context context, int zSize) {
         super(context);
-        spritesMaterial = new CopyOnWriteArraySet<InterfaceSpriteMaterial>();
-        spritesCollision = new CopyOnWriteArraySet<InterfaceSpriteCollisionListener>();
-        spritesTouchListener = new CopyOnWriteArraySet<InterfaceSpriteTouchListener>();
-        sprites = new CopyOnWriteArraySet[zSize];
-        spritesNew = new CopyOnWriteArraySet[zSize];
+        spritesMaterial = new VeryFastSet<InterfaceSpriteMaterial>();
+        spritesCollision = new VeryFastSet<InterfaceSpriteCollisionListener>();
+        spritesTouchListener = new VeryFastSet<InterfaceSpriteTouchListener>();
+        sprites = new VeryFastSet[zSize];
         for (int i = 0; i < zSize; i++) {
-            sprites[i] = new CopyOnWriteArraySet<InterfaceSprite>();
-            spritesNew[i] = new CopyOnWriteArraySet<InterfaceSprite>();
+            sprites[i] = new VeryFastSet<InterfaceSprite>();
         }
     }
 
-    public void addSprite(int z, InterfaceSprite sprite) {
+    public void addSprite(int z, InterfaceSprite s) {
         if (z < 0 || z >= sprites.length) {
             return;
         }
-        spritesNew[z].add(sprite);
+        sprites[z].add(s);
+        if (s instanceof InterfaceSpriteCollisionListener) {
+            spritesCollision.add((InterfaceSpriteCollisionListener) s);
+        } else if (s instanceof InterfaceSpriteMaterial) {
+            spritesMaterial.add((InterfaceSpriteMaterial) s);
+        }
+        if (s instanceof InterfaceSpriteTouchListener) {
+            spritesTouchListener.add((InterfaceSpriteTouchListener) s);
+        }
     }
 
     @Override
     protected void myDraw(Canvas canvas) {
-        Iterator<InterfaceSprite> iterator;
-        InterfaceSprite s;
         synchronized (this) {
+            //<editor-fold desc="Обновляем коллекции">
+            try {
+                spritesMaterial.update();
+            } catch (Exception e) {
+                Log.e("SpriteView", "spritesMaterial update error", e);
+            }
+            try {
+                spritesCollision.update();
+            } catch (Exception e) {
+                Log.e("SpriteView", "spritesCollision update error", e);
+            }
+            try {
+                spritesTouchListener.update();
+            } catch (Exception e) {
+                Log.e("SpriteView", "spritesTouchListener update error", e);
+            }
+            //</editor-fold>
+
             //<editor-fold desc="Рисуем старые спрайты">
             for (int i = 0; i < sprites.length; i++) {
                 try {
-                    iterator = sprites[i].iterator();
-                    while (iterator.hasNext()) {
-                        s = iterator.next();
-                        if (!s.onDraw(canvas)) {
+                    sprites[i].update();
+                } catch (Exception e) {
+                    Log.e("SpriteView", "sprites update error", e);
+                }
+                try {
+                    Iterator<InterfaceSprite> spriteIterator = sprites[i].iterator();
+                    while (spriteIterator.hasNext()) {
+                        InterfaceSprite sprite = spriteIterator.next();
+                        if (!sprite.onDraw(canvas)) {
                             Log.i("SpriteView", "InterfaceSprite remove");
-                            if (s instanceof InterfaceSpriteCollisionListener) {
-                                spritesCollision.remove((InterfaceSpriteCollisionListener) s);
-                            } else if (s instanceof InterfaceSpriteMaterial) {
-                                spritesMaterial.remove((InterfaceSpriteMaterial) s);
+                            if (sprite instanceof InterfaceSpriteCollisionListener) {
+                                spritesCollision.remove((InterfaceSpriteCollisionListener) sprite);
+                            } else if (sprite instanceof InterfaceSpriteMaterial) {
+                                spritesMaterial.remove((InterfaceSpriteMaterial) sprite);
                             }
-                            if (s instanceof InterfaceSpriteTouchListener) {
-                                spritesTouchListener.remove((InterfaceSpriteTouchListener) s);
+                            if (sprite instanceof InterfaceSpriteTouchListener) {
+                                spritesTouchListener.remove((InterfaceSpriteTouchListener) sprite);
                             }
-                            sprites[i].remove(s);
+                            sprites[i].remove(sprite);
                         }
                     }
                 } catch (Exception e) {
@@ -69,22 +95,26 @@ public class DrawSprite extends DrawView {
                 }
             }
             //</editor-fold>
-
+            //<editor-fold desc="Проверяем колизии">
             try {
-                for (InterfaceSpriteCollisionListener collisionListener : spritesCollision) {
-                    for (InterfaceSpriteMaterial material : spritesMaterial) {
-                        if (collisionListener.equals(material)) {
+                Iterator<InterfaceSpriteCollisionListener> iteratorCollision = spritesCollision.iterator();
+                while (iteratorCollision.hasNext()) {
+                    InterfaceSpriteCollisionListener listener = iteratorCollision.next();
+                    Iterator<InterfaceSpriteMaterial> iteratorMaterial = spritesMaterial.iterator();
+                    while (iteratorMaterial.hasNext()) {
+                        InterfaceSpriteMaterial material = iteratorMaterial.next();
+                        if (listener.equals(material)) {
                             continue;
                         }
                         // 1x2 < 2x1 || 1x1 > 2x2
-                        if ((collisionListener.getX() + collisionListener.getWidth() < material.getX() || collisionListener.getX() > material.getX() + material.getWidth())) {
+                        if ((listener.getX() + listener.getWidth() < material.getX() || listener.getX() > material.getX() + material.getWidth())) {
                             continue;
                         }
                         // 1y2 < 2y1 || 1y1 > 2y2
-                        if ((collisionListener.getY() + collisionListener.getHeight() < material.getY() || collisionListener.getY() > material.getY() + material.getHeight())) {
+                        if ((listener.getY() + listener.getHeight() < material.getY() || listener.getY() > material.getY() + material.getHeight())) {
                             continue;
                         }
-                        if (!collisionListener.onCollision(material)) {
+                        if (!listener.onCollision(material)) {
                             return;
                         }
                     }
@@ -92,30 +122,15 @@ public class DrawSprite extends DrawView {
             } catch (Exception e) {
                 Log.e("SpriteView", "InterfaceSpriteCollisionListener error", e);
             }
-
-            //<editor-fold desc="Добавляем новые спрайты">
-            for (int i = 0; i < sprites.length; i++) {
-                iterator = spritesNew[i].iterator();
-                while (iterator.hasNext()) {
-                    s = iterator.next();
-                    sprites[i].add(s);
-                    if (s instanceof InterfaceSpriteCollisionListener) {
-                        spritesCollision.add((InterfaceSpriteCollisionListener) s);
-                    } else if (s instanceof InterfaceSpriteMaterial) {
-                        spritesMaterial.add((InterfaceSpriteMaterial) s);
-                    }
-                    if (s instanceof InterfaceSpriteTouchListener) {
-                        spritesTouchListener.add((InterfaceSpriteTouchListener) s);
-                    }
-                }
-                spritesNew[i].clear();
-            }
             //</editor-fold>
         }
     }
 
     public boolean onTouchEvent(MotionEvent e) {
-        for (InterfaceSpriteTouchListener touchListener : spritesTouchListener) {
+        Iterator<InterfaceSpriteTouchListener> iterator = spritesTouchListener.iterator();
+        InterfaceSpriteTouchListener touchListener;
+        while (iterator.hasNext()) {
+            touchListener = iterator.next();
             if (!touchListener.onTouchEvent(e)) {
                 return false;
             }
