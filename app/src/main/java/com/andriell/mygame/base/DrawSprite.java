@@ -48,31 +48,8 @@ public class DrawSprite extends DrawView {
     @Override
     protected void myDraw(Canvas canvas) {
         synchronized (this) {
-            //<editor-fold desc="Обновляем коллекции">
-            try {
-                spritesMaterial.update();
-            } catch (Exception e) {
-                Log.e("SpriteView", "spritesMaterial update error", e);
-            }
-            try {
-                spritesCollision.update();
-            } catch (Exception e) {
-                Log.e("SpriteView", "spritesCollision update error", e);
-            }
-            try {
-                spritesTouchListener.update();
-            } catch (Exception e) {
-                Log.e("SpriteView", "spritesTouchListener update error", e);
-            }
-            //</editor-fold>
-
             //<editor-fold desc="Рисуем старые спрайты">
             for (int i = 0; i < sprites.length; i++) {
-                try {
-                    sprites[i].update();
-                } catch (Exception e) {
-                    Log.e("SpriteView", "sprites update error", e);
-                }
                 try {
                     Iterator<InterfaceSprite> spriteIterator = sprites[i].iterator();
                     while (spriteIterator.hasNext()) {
@@ -93,8 +70,32 @@ public class DrawSprite extends DrawView {
                 } catch (Exception e) {
                     Log.e("SpriteView", "InterfaceSprite iterator error", e);
                 }
+                try {
+                    sprites[i].update();
+                } catch (Exception e) {
+                    Log.e("SpriteView", "sprites update error", e);
+                }
             }
             //</editor-fold>
+
+            //<editor-fold desc="Обновляем коллекции">
+            try {
+                spritesMaterial.update();
+            } catch (Exception e) {
+                Log.e("SpriteView", "spritesMaterial update error", e);
+            }
+            try {
+                spritesCollision.update();
+            } catch (Exception e) {
+                Log.e("SpriteView", "spritesCollision update error", e);
+            }
+            try {
+                spritesTouchListener.update();
+            } catch (Exception e) {
+                Log.e("SpriteView", "spritesTouchListener update error", e);
+            }
+            //</editor-fold>
+
             //<editor-fold desc="Проверяем колизии">
             try {
                 Iterator<InterfaceSpriteCollisionListener> iteratorCollision = spritesCollision.iterator();
