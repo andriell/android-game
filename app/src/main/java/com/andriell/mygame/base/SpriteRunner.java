@@ -8,10 +8,10 @@ import android.graphics.Canvas;
  */
 
 public class SpriteRunner extends SpriteBitmap {
-    protected int xSpeed = 0;
-    protected int ySpeed = 0;
+    protected float xSpeed = 0;
+    protected float ySpeed = 0;
 
-    public SpriteRunner(Bitmap bitmap, int x, int y, int xSpeed, int ySpeed) {
+    public SpriteRunner(Bitmap bitmap, float x, float y, float xSpeed, float ySpeed) {
         super(bitmap, x, y);
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;

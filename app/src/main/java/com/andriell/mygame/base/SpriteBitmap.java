@@ -7,7 +7,7 @@ import android.graphics.Canvas;
 public class SpriteBitmap extends SpriteMaterial {
     Bitmap bitmap;
 
-    public SpriteBitmap(Bitmap bitmap, int x, int y) {
+    public SpriteBitmap(Bitmap bitmap, float x, float y) {
         super(x, y, bitmap.getWidth(), bitmap.getHeight());
         this.bitmap = bitmap;
     }

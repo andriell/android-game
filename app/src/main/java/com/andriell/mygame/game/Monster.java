@@ -11,7 +11,7 @@ import com.andriell.mygame.base.SpriteRunner;
 public class Monster extends SpriteRunner implements InterfaceSpriteCollisionListener {
     boolean isDead = false;
 
-    public Monster(Bitmap bitmap, int x, int y, int xSpeed, int ySpeed) {
+    public Monster(Bitmap bitmap, float x, float y, float xSpeed, float ySpeed) {
         super(bitmap, x, y, xSpeed, ySpeed);
     }
 

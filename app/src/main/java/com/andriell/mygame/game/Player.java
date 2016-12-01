@@ -11,21 +11,21 @@ import com.andriell.mygame.base.SpriteRunner;
  */
 
 public class Player extends SpriteBitmap {
-    private int centerX;
-    private int centerY;
+    private float centerX;
+    private float centerY;
 
 
-    public Player(Bitmap bitmap, int x, int y) {
+    public Player(Bitmap bitmap, float x, float y) {
         super(bitmap, x, y);
         centerX = x + bitmap.getWidth() / 2;
         centerY = y + bitmap.getHeight() / 2;
     }
 
-    public int getCenterX() {
+    public float getCenterX() {
         return centerX;
     }
 
-    public int getCenterY() {
+    public float getCenterY() {
         return centerY;
     }
 }

@@ -5,8 +5,8 @@ package com.andriell.mygame.base;
  */
 
 public interface InterfaceSpriteMaterial extends InterfaceSprite {
-    int getX();
-    int getY();
-    int getHeight();
-    int getWidth();
+    float getX();
+    float getY();
+    float getHeight();
+    float getWidth();
 }

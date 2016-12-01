@@ -13,7 +13,7 @@ import com.andriell.mygame.base.SpriteRunner;
 public class Bullet extends SpriteRunner {
     private boolean isDead = false;
 
-    public Bullet(Bitmap bitmap, int x, int y, int xSpeed, int ySpeed) {
+    public Bullet(Bitmap bitmap, float x, float y, float xSpeed, float ySpeed) {
         super(bitmap, x, y, xSpeed, ySpeed);
     }
 

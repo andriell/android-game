@@ -69,11 +69,11 @@ public class MainActivity extends Activity {
                 }
 
                 Log.i("SpriteView", "onTouchEvent");
-                double x = e.getX() - player.getCenterX();
-                double y = e.getY() - player.getCenterY();
-                double z = Math.sqrt(x * x + y * y);
-                int speedX = (int) (10 * (x / z));
-                int speedY = (int) (10 * (y / z));
+                float x = e.getX() - player.getCenterX();
+                float y = e.getY() - player.getCenterY();
+                float z = (float) Math.sqrt(x * x + y * y);
+                float speedX = (10f * x) / z;
+                float speedY = (10f * y) / z;
 
                 addSprite(1, new Bullet(bitmapBullet, player.getCenterX(), player.getCenterY(), speedX, speedY));
                 return true;

@@ -11,12 +11,12 @@ public abstract class SpriteButton extends SpriteBitmap implements InterfaceSpri
     Bitmap bitmapNormal = null;
     Bitmap bitmapPressed = null;
 
-    public SpriteButton(Bitmap bitmap, int x, int y) {
+    public SpriteButton(Bitmap bitmap, float x, float y) {
         super(bitmap, x, y);
         bitmapNormal = bitmap;
     }
 
-    public SpriteButton(Bitmap bitmapNormal, Bitmap bitmapPressed, int x, int y) {
+    public SpriteButton(Bitmap bitmapNormal, Bitmap bitmapPressed, float x, float y) {
         super(bitmapNormal, x, y);
         this.bitmapNormal = bitmapNormal;
         this.bitmapPressed = bitmapPressed;

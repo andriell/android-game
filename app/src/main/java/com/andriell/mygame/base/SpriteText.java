@@ -10,16 +10,16 @@ import android.graphics.Paint;
 public class SpriteText implements InterfaceSprite  {
     private Paint paint;
     private String text = "";
-    private int x;
-    private int y;
+    private float x;
+    private float y;
 
-    public SpriteText(Paint paint, int x, int y) {
+    public SpriteText(Paint paint, float x, float y) {
         this.x = x;
         this.y = y;
         this.paint = paint;
     }
 
-    public SpriteText(int x, int y) {
+    public SpriteText(float x, float y) {
         this.x = x;
         this.y = y;
         paint = new Paint();
