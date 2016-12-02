@@ -46,7 +46,7 @@ public class SpriteText implements InterfaceSpriteSetPosition {
 
     @Override
     public boolean onDraw(Canvas c) {
-        c.drawText(text, x, y, paint);
+        c.drawText(getText(), getX(), getY(), getPaint());
         return true;
     }
 
@@ -67,16 +67,28 @@ public class SpriteText implements InterfaceSpriteSetPosition {
 
     @Override
     public float getY() {
-        return y;
+        if (paint == null) {
+            return y;
+        }
+        return y + paint.getTextSize();
     }
 
     @Override
     public float getHeight() {
-        return 0;
+        if (paint == null) {
+            return 0F;
+        }
+        return paint.getTextSize();
     }
 
     @Override
     public float getWidth() {
-        return 0;
+        if (paint == null) {
+            return 0F;
+        }
+        if (text == null || text.length() == 0) {
+            return paint.getTextSize();
+        }
+        return paint.getTextSize() * text.length();
     }
 }

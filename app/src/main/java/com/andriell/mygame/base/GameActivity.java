@@ -54,6 +54,10 @@ public class GameActivity extends Activity {
     }
 
     //<editor-fold desc="createBitmap">
+    public Bitmap createBitmapP(int id) {
+        return createBitmapP(id, 0F, 0F);
+    }
+
     public Bitmap createBitmapP(int id, float height) {
         return createBitmapP(id, 0F, height);
     }
@@ -111,34 +115,52 @@ public class GameActivity extends Activity {
     }
     //</editor-fold>
 
+    //<editor-fold desc="createSpriteBitmap">
+    public SpriteBitmap createSpriteBitmapP(int idNormal) {
+        return new SpriteBitmap(createBitmapP(idNormal));
+    }
+
+    public SpriteBitmap createSpriteBitmapP(int idNormal, float height) {
+        return new SpriteBitmap(createBitmapP(idNormal, height));
+    }
+
+    public SpriteBitmap createSpriteBitmapP(int idNormal, float width, float height) {
+        return new SpriteBitmap(createBitmapP(idNormal, width, height));
+    }
+
+    public SpriteBitmap createSpriteBitmapP(int idNormal, float x, float y, float width, float height) {
+        return new SpriteBitmap(createBitmapP(idNormal, width, height), x, y);
+    }
+    //</editor-fold>
+
     //<editor-fold desc="setPosition">
     public void setPositionCenter(InterfaceSpriteSetPosition material) {
         setPositionP(material, 0.5F, 0.5F, -1F, -1F, ALIGN_CENTER, ALIGN_CENTER);
     }
 
-    public void setPositionPTR(InterfaceSpriteSetPosition material, float top, float right, int align1) {
+    public void setPositionPTR(InterfaceSpriteSetPosition material, float top, float right, final int align1) {
         setPositionP(material, top, right, -1F, -1F, align1, ALIGN_CENTER);
     }
-    public void setPositionPBR(InterfaceSpriteSetPosition material, float bottom, float right, int align1) {
+    public void setPositionPBR(InterfaceSpriteSetPosition material, float bottom, float right, final int align1) {
         setPositionP(material, -1F, right, bottom, -1F, align1, ALIGN_CENTER);
     }
-    public void setPositionPTL(InterfaceSpriteSetPosition material, float top, float left, int align1) {
+    public void setPositionPTL(InterfaceSpriteSetPosition material, float top, float left, final int align1) {
         setPositionP(material, top, -1F, -1F, left, align1, ALIGN_CENTER);
     }
-    public void setPositionPBL(InterfaceSpriteSetPosition material, float bottom, float left, int align1) {
+    public void setPositionPBL(InterfaceSpriteSetPosition material, float bottom, float left, final int align1) {
         setPositionP(material, -1F, -1F, bottom, left, align1, ALIGN_CENTER);
     }
 
-    public void setPositionPTR(InterfaceSpriteSetPosition material, float top, float right, int align1, int align2) {
+    public void setPositionPTR(InterfaceSpriteSetPosition material, float top, float right, final int align1, final int align2) {
         setPositionP(material, top, right, -1F, -1F, align1, align2);
     }
-    public void setPositionPBR(InterfaceSpriteSetPosition material, float bottom, float right, int align1, int align2) {
+    public void setPositionPBR(InterfaceSpriteSetPosition material, float bottom, float right, final int align1, final int align2) {
         setPositionP(material, -1F, right, bottom, -1F, align1, align2);
     }
-    public void setPositionPTL(InterfaceSpriteSetPosition material, float top, float left, int align1, int align2) {
+    public void setPositionPTL(InterfaceSpriteSetPosition material, float top, float left, final int align1, final int align2) {
         setPositionP(material, top, -1F, -1F, left, align1, align2);
     }
-    public void setPositionPBL(InterfaceSpriteSetPosition material, float bottom, float left, int align1, int align2) {
+    public void setPositionPBL(InterfaceSpriteSetPosition material, float bottom, float left, final int align1, final int align2) {
         setPositionP(material, -1F, -1F, bottom, left, align1, align2);
     }
 
@@ -158,52 +180,39 @@ public class GameActivity extends Activity {
     public void setPositionP(InterfaceSpriteSetPosition material, float top, float right, float bottom, float left) {
         setPositionP(material, top, right, bottom, left, ALIGN_CENTER, ALIGN_CENTER);
     }
-    public void setPositionP(InterfaceSpriteSetPosition material, float top, float right, float bottom, float left, int align1, int align2) {
-        int horizontalAlign = ALIGN_CENTER;
-        int verticalAlign = ALIGN_CENTER;
-        if (align1 == ALIGN_TOP || align1 == ALIGN_BOTTOM) {
-            verticalAlign = align1;
-        } else if (align1 == ALIGN_LEFT || align1 == ALIGN_RIGHT) {
-            horizontalAlign = align1;
-        }
-        if (align2 == ALIGN_TOP || align2 == ALIGN_BOTTOM) {
-            verticalAlign = align2;
-        } else if (align2 == ALIGN_LEFT || align2 == ALIGN_RIGHT) {
-            horizontalAlign = align2;
-        }
-
-        if (left >= 0) {
-            if (horizontalAlign == ALIGN_LEFT) {
-                material.setX(displaySize.x * left);
-            } else if (horizontalAlign == ALIGN_RIGHT) {
-                material.setX(displaySize.x * left + material.getWidth());
-            } else if (horizontalAlign == ALIGN_CENTER) {
-                material.setX(displaySize.x * left - material.getWidth() / 2);
-            }
-        } else if (right >= 0) {
-            if (horizontalAlign == ALIGN_LEFT) {
+    public void setPositionP(InterfaceSpriteSetPosition material, float top, float right, float bottom, float left, final int align1, final int align2) {
+        if (right >= 0) {
+            if (align1 == ALIGN_LEFT || align2 == ALIGN_LEFT) {
                 material.setX(displaySize.x - displaySize.x * right);
-            } else if (horizontalAlign == ALIGN_RIGHT) {
-                material.setX(displaySize.x - displaySize.x * right + material.getWidth());
-            } else if (horizontalAlign == ALIGN_CENTER) {
+            } else if (align1 == ALIGN_RIGHT || align2 == ALIGN_RIGHT) {
+                material.setX(displaySize.x - displaySize.x * right - material.getWidth());
+            } else {
                 material.setX(displaySize.x - displaySize.x * right - material.getWidth() / 2);
+            }
+        } else if (left >= 0) {
+            if (align1 == ALIGN_LEFT || align2 == ALIGN_LEFT) {
+                material.setX(displaySize.x * left);
+            } else if (align1 == ALIGN_RIGHT || align2 == ALIGN_RIGHT) {
+                material.setX(displaySize.x * left - material.getWidth());
+            } else {
+                material.setX(displaySize.x * left - material.getWidth() / 2);
             }
         }
 
         if (top >= 0) {
-            if (verticalAlign == ALIGN_TOP) {
+            if (align1 == ALIGN_TOP || align2 == ALIGN_TOP) {
                 material.setY(displaySize.y * top);
-            } else if (verticalAlign == ALIGN_BOTTOM) {
-                material.setY(displaySize.y * top + material.getHeight());
-            } else if (verticalAlign == ALIGN_CENTER) {
+            } else if (align1 == ALIGN_BOTTOM || align2 == ALIGN_BOTTOM) {
+                material.setY(displaySize.y * top - material.getHeight());
+            } else {
                 material.setY(displaySize.y * top - material.getHeight() / 2);
             }
         } else if (bottom >= 0) {
-            if (verticalAlign == ALIGN_TOP) {
+            if (align1 == ALIGN_TOP || align2 == ALIGN_TOP) {
                 material.setY(displaySize.y - displaySize.y * bottom);
-            } else if (verticalAlign == ALIGN_BOTTOM) {
-                material.setY(displaySize.y - displaySize.y * bottom + material.getHeight());
-            } else if (verticalAlign == ALIGN_CENTER) {
+            } else if (align1 == ALIGN_BOTTOM || align2 == ALIGN_BOTTOM) {
+                material.setY(displaySize.y - displaySize.y * bottom - material.getHeight());
+            } else {
                 material.setY(displaySize.y - displaySize.y * bottom - material.getHeight() / 2);
             }
         }

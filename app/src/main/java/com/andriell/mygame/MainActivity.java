@@ -68,7 +68,7 @@ public class MainActivity extends GameActivity {
         drawSprite.addSprite(1, player);
 
         count = new Count();
-        setPositionPTL(count, 0.01F, 0.5F, ALIGN_TOP);
+        setPositionPTL(count, 0F, 0.5F, ALIGN_TOP);
         drawSprite.addSprite(1, count);
 
         setContentView(drawSprite);
@@ -86,7 +86,7 @@ public class MainActivity extends GameActivity {
                             return r;
                         }
                     };
-                    setPositionPTR(monster, 0F, rnd.nextInt(85) / 100, ALIGN_LEFT);
+                    setPositionPTR(monster, rnd.nextFloat() * 0.85F, 0F, ALIGN_LEFT, ALIGN_TOP);
                     drawSprite.addSprite(1, monster);
                 }
                 handler.postDelayed(this, rnd.nextInt(10000));
