@@ -93,7 +93,7 @@ public class MainActivity extends Activity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                drawSprite.addSprite(1, new Monster(animationMonster, displaySize.x - animationMonster.getWidth(), rnd.nextInt((int) (displaySize.y - animationMonster.getHeight())), -3, 0) {
+                drawSprite.addSprite(1, new Monster(animationMonster, displaySize.x - 1, rnd.nextInt((int) (displaySize.y - animationMonster.getHeight())), -3, 0) {
                     @Override
                     public boolean onCollision(InterfaceSpriteMaterial sprite) {
                         boolean r = super.onCollision(sprite);
