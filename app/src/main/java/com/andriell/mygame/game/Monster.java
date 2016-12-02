@@ -1,18 +1,17 @@
 package com.andriell.mygame.game;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.util.Log;
 
+import com.andriell.mygame.base.Animation;
 import com.andriell.mygame.base.InterfaceSpriteCollisionListener;
 import com.andriell.mygame.base.InterfaceSpriteMaterial;
-import com.andriell.mygame.base.SpriteRunner;
+import com.andriell.mygame.base.SpriteRunnerAnimation;
 
-public class Monster extends SpriteRunner implements InterfaceSpriteCollisionListener {
+public class Monster extends SpriteRunnerAnimation implements InterfaceSpriteCollisionListener {
     boolean isDead = false;
 
-    public Monster(Bitmap bitmap, float x, float y, float xSpeed, float ySpeed) {
-        super(bitmap, x, y, xSpeed, ySpeed);
+    public Monster(Animation animation, float x, float y, float xSpeed, float ySpeed) {
+        super(animation, x, y, xSpeed, ySpeed);
     }
 
     @Override

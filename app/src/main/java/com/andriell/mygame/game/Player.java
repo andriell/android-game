@@ -1,10 +1,8 @@
 package com.andriell.mygame.game;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
 import com.andriell.mygame.base.SpriteBitmap;
-import com.andriell.mygame.base.SpriteRunner;
 
 /**
  * Created by Rybalko on 24.11.2016.

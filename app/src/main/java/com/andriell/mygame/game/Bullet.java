@@ -3,14 +3,13 @@ package com.andriell.mygame.game;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-import com.andriell.mygame.base.InterfaceSpriteMaterial;
-import com.andriell.mygame.base.SpriteRunner;
+import com.andriell.mygame.base.SpriteRunnerBitmap;
 
 /**
  * Created by Rybalko on 24.11.2016.
  */
 
-public class Bullet extends SpriteRunner {
+public class Bullet extends SpriteRunnerBitmap {
     private boolean isDead = false;
 
     public Bullet(Bitmap bitmap, float x, float y, float xSpeed, float ySpeed) {

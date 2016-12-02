@@ -13,9 +13,8 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.andriell.mygame.base.Animation;
 import com.andriell.mygame.base.InterfaceSpriteMaterial;
-import com.andriell.mygame.base.SpriteBitmap;
-import com.andriell.mygame.base.SpriteButton;
 import com.andriell.mygame.base.SpriteColor;
 import com.andriell.mygame.base.DrawSprite;
 import com.andriell.mygame.game.Bullet;
@@ -29,7 +28,7 @@ public class MainActivity extends Activity {
 
     Bitmap bitmapPlayer;
     Bitmap bitmapBullet;
-    Bitmap bitmapMonster;
+    Animation animationMonster;
     Player player;
     DrawSprite drawSprite;
     Random rnd = new Random();
@@ -53,8 +52,12 @@ public class MainActivity extends Activity {
         bitmapBullet = BitmapFactory.decodeResource(getResources(), R.drawable.bullet);
         bitmapBullet = Bitmap.createScaledBitmap(bitmapBullet, bitmapBullet.getWidth() / 16, bitmapBullet.getHeight() / 16, true);
 
-        bitmapMonster = BitmapFactory.decodeResource(getResources(), R.drawable.monster);
-        bitmapMonster = Bitmap.createScaledBitmap(bitmapMonster, (int) (bitmapMonster.getWidth() / 3), (int) (bitmapMonster.getHeight() / 3), true);
+        Bitmap monster1 = BitmapFactory.decodeResource(getResources(), R.drawable.monster1);
+        monster1 = Bitmap.createScaledBitmap(monster1, (int) (monster1.getWidth() / 3), (int) (monster1.getHeight() / 3), true);
+        Bitmap monster2 = BitmapFactory.decodeResource(getResources(), R.drawable.monster2);
+        monster2 = Bitmap.createScaledBitmap(monster2, (int) (monster2.getWidth() / 3), (int) (monster2.getHeight() / 3), true);
+
+        animationMonster = new Animation(new Bitmap[]{monster1, monster2}, new int[]{100, 100});
 
         getWindowManager().getDefaultDisplay().getSize(displaySize);
 
@@ -90,7 +93,7 @@ public class MainActivity extends Activity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                drawSprite.addSprite(1, new Monster(bitmapMonster, displaySize.x - bitmapMonster.getWidth(), rnd.nextInt(displaySize.y - bitmapMonster.getHeight()), -3, 0) {
+                drawSprite.addSprite(1, new Monster(animationMonster, displaySize.x - animationMonster.getWidth(), rnd.nextInt((int) (displaySize.y - animationMonster.getHeight())), -3, 0) {
                     @Override
                     public boolean onCollision(InterfaceSpriteMaterial sprite) {
                         boolean r = super.onCollision(sprite);
