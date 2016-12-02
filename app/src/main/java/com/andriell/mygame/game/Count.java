@@ -19,6 +19,13 @@ public class Count extends SpriteText {
         paint.setStrokeWidth(3);
         paint.setTextAlign(Paint.Align.LEFT);
         setPaint(paint);
+
+        paint = new Paint(paint);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setStrokeMiter(10);
+        paint.setColor(Color.WHITE);
+        setPaintStroke(paint);
         setText("0");
     }
 

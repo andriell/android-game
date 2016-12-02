@@ -9,6 +9,7 @@ import android.graphics.Paint;
 
 public class SpriteText implements InterfaceSpriteSetPosition {
     private Paint paint;
+    private Paint paintStroke;
     private String text = "";
     private float x;
     private float y;
@@ -36,6 +37,14 @@ public class SpriteText implements InterfaceSpriteSetPosition {
         this.paint = paint;
     }
 
+    public Paint getPaintStroke() {
+        return paintStroke;
+    }
+
+    public void setPaintStroke(Paint paintStroke) {
+        this.paintStroke = paintStroke;
+    }
+
     public String getText() {
         return text;
     }
@@ -46,6 +55,9 @@ public class SpriteText implements InterfaceSpriteSetPosition {
 
     @Override
     public boolean onDraw(Canvas c) {
+        if (getPaintStroke() != null) {
+            c.drawText(getText(), getX(), getY(), getPaintStroke());
+        }
         c.drawText(getText(), getX(), getY(), getPaint());
         return true;
     }
