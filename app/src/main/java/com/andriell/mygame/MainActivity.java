@@ -1,19 +1,14 @@
 package com.andriell.mygame;
 
-import android.app.Activity;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.andriell.mygame.base.Animation;
+import com.andriell.mygame.base.GameActivity;
 import com.andriell.mygame.base.InterfaceSpriteMaterial;
 import com.andriell.mygame.base.SpriteColor;
 import com.andriell.mygame.base.DrawSprite;
@@ -24,7 +19,7 @@ import com.andriell.mygame.game.Player;
 
 import java.util.Random;
 
-public class MainActivity extends Activity {
+public class MainActivity extends GameActivity {
 
     Bitmap bitmapPlayer;
     Bitmap bitmapBullet;
@@ -33,33 +28,18 @@ public class MainActivity extends Activity {
     DrawSprite drawSprite;
     Random rnd = new Random();
     Handler handler = new Handler();
-    Point displaySize = new Point();
+
     Count count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // если хотим, чтобы приложение постоянно имело портретную ориентацию
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        // если хотим, чтобы приложение было полноэкранным
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        // и без заголовка
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        bitmapPlayer = BitmapFactory.decodeResource(getResources(), R.drawable.player);
-        bitmapPlayer = Bitmap.createScaledBitmap(bitmapPlayer, bitmapPlayer.getWidth() / 4, bitmapPlayer.getHeight() / 4, true);
 
-        bitmapBullet = BitmapFactory.decodeResource(getResources(), R.drawable.bullet);
-        bitmapBullet = Bitmap.createScaledBitmap(bitmapBullet, bitmapBullet.getWidth() / 16, bitmapBullet.getHeight() / 16, true);
+        bitmapPlayer = createBitmapP(R.drawable.player, 0.12F);
+        bitmapBullet = createBitmapP(R.drawable.bullet, 0.035F);
 
-        Bitmap monster1 = BitmapFactory.decodeResource(getResources(), R.drawable.monster1);
-        monster1 = Bitmap.createScaledBitmap(monster1, (int) (monster1.getWidth() / 3), (int) (monster1.getHeight() / 3), true);
-        Bitmap monster2 = BitmapFactory.decodeResource(getResources(), R.drawable.monster2);
-        monster2 = Bitmap.createScaledBitmap(monster2, (int) (monster2.getWidth() / 3), (int) (monster2.getHeight() / 3), true);
-
-        animationMonster = new Animation(new Bitmap[]{monster1, monster2}, new int[]{100, 100});
-
-        getWindowManager().getDefaultDisplay().getSize(displaySize);
+        animationMonster = createAnimationP(new int[] {R.drawable.monster1, R.drawable.monster2}, new int[]{100, 100}, 0.15F);
 
         player = new Player(bitmapPlayer, 100, displaySize.y / 2);
 
@@ -93,16 +73,18 @@ public class MainActivity extends Activity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                drawSprite.addSprite(1, new Monster(animationMonster, displaySize.x - 1, rnd.nextInt((int) (displaySize.y - animationMonster.getHeight())), -3, 0) {
-                    @Override
-                    public boolean onCollision(InterfaceSpriteMaterial sprite) {
-                        boolean r = super.onCollision(sprite);
-                        if (!r) {
-                            count.count();
+                if (isRun) {
+                    drawSprite.addSprite(1, new Monster(animationMonster, displaySize.x - 1, rnd.nextInt((int) (displaySize.y - animationMonster.getHeight())), -3, 0) {
+                        @Override
+                        public boolean onCollision(InterfaceSpriteMaterial sprite) {
+                            boolean r = super.onCollision(sprite);
+                            if (!r) {
+                                count.count();
+                            }
+                            return r;
                         }
-                        return r;
-                    }
-                });
+                    });
+                }
                 handler.postDelayed(this, rnd.nextInt(10000));
             }
         });
