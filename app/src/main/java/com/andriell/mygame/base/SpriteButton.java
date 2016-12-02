@@ -7,13 +7,21 @@ import android.view.MotionEvent;
  * Created by Андрей on 01.12.2016.
  */
 
-public abstract class SpriteButton extends SpriteBitmap implements InterfaceSpriteTouchListener {
+public class SpriteButton extends SpriteBitmap implements InterfaceSpriteTouchListener {
     Bitmap bitmapNormal = null;
     Bitmap bitmapPressed = null;
+    DownListener downListener;
 
-    public SpriteButton(Bitmap bitmap, float x, float y) {
-        super(bitmap, x, y);
-        bitmapNormal = bitmap;
+    public SpriteButton(Bitmap bitmapNormal) {
+        this(bitmapNormal, null, 0F, 0F);
+    }
+
+    public SpriteButton(Bitmap bitmapNormal, float x, float y) {
+        this(bitmapNormal, null, x, y);
+    }
+
+    public SpriteButton(Bitmap bitmapNormal, Bitmap bitmapPressed) {
+        this(bitmapNormal, bitmapPressed, 0F, 0F);
     }
 
     public SpriteButton(Bitmap bitmapNormal, Bitmap bitmapPressed, float x, float y) {
@@ -26,12 +34,25 @@ public abstract class SpriteButton extends SpriteBitmap implements InterfaceSpri
     public boolean onTouchEvent(MotionEvent e) {
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
             bitmap = bitmapPressed == null ? bitmapNormal : bitmapPressed;
-            return onDown(e);
+            if (downListener != null) {
+                return downListener.onDown(e);
+            }
+            return true;
         } else {
             bitmap = bitmapNormal;
         }
         return true;
     }
 
-    public abstract boolean onDown(MotionEvent e);
+    public DownListener getDownListener() {
+        return downListener;
+    }
+
+    public void setDownListener(DownListener downListener) {
+        this.downListener = downListener;
+    }
+
+    public static interface DownListener {
+        public boolean onDown(MotionEvent e);
+    }
 }

@@ -11,6 +11,9 @@ public class SpriteRunnerAnimation extends SpriteAnimation {
     protected float xSpeed = 0;
     protected float ySpeed = 0;
 
+    public SpriteRunnerAnimation(Animation animation, float xSpeed, float ySpeed) {
+        this(animation, 0F, 0F, xSpeed, ySpeed);
+    }
     public SpriteRunnerAnimation(Animation animation, float x, float y, float xSpeed, float ySpeed) {
         super(animation, x, y);
         this.xSpeed = xSpeed;

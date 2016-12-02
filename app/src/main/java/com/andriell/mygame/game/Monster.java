@@ -10,8 +10,8 @@ import com.andriell.mygame.base.SpriteRunnerAnimation;
 public class Monster extends SpriteRunnerAnimation implements InterfaceSpriteCollisionListener {
     boolean isDead = false;
 
-    public Monster(Animation animation, float x, float y, float xSpeed, float ySpeed) {
-        super(animation, x, y, xSpeed, ySpeed);
+    public Monster(Animation animation, float xSpeed, float ySpeed) {
+        super(animation, xSpeed, ySpeed);
     }
 
     @Override

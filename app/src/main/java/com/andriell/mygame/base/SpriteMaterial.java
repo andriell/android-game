@@ -44,4 +44,14 @@ public class SpriteMaterial implements InterfaceSpriteMaterial {
     public float getWidth() {
         return width;
     }
+
+    @Override
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    @Override
+    public void setY(float y) {
+        this.y = y;
+    }
 }

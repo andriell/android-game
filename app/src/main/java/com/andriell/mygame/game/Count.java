@@ -12,8 +12,7 @@ import com.andriell.mygame.base.SpriteText;
 public class Count extends SpriteText {
     private int count = 0;
 
-    public Count(float x, float y) {
-        super(x, y);
+    public Count() {
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setTextSize(30);

@@ -41,7 +41,8 @@ public class MainActivity extends GameActivity {
 
         animationMonster = createAnimationP(new int[] {R.drawable.monster1, R.drawable.monster2}, new int[]{100, 100}, 0.15F);
 
-        player = new Player(bitmapPlayer, 100, displaySize.y / 2);
+        player = new Player(bitmapPlayer);
+        setPositionPTL(player, 0.5F, 0.05F, ALIGN_CENTER, ALIGN_CENTER);
 
         drawSprite = new DrawSprite(this, 2) {
             public boolean onTouchEvent(MotionEvent e)
@@ -66,7 +67,8 @@ public class MainActivity extends GameActivity {
 
         drawSprite.addSprite(1, player);
 
-        count = new Count(displaySize.x / 2, 30);
+        count = new Count();
+        setPositionPTL(count, 0.01F, 0.5F, ALIGN_TOP);
         drawSprite.addSprite(1, count);
 
         setContentView(drawSprite);
@@ -74,7 +76,7 @@ public class MainActivity extends GameActivity {
             @Override
             public void run() {
                 if (isRun) {
-                    drawSprite.addSprite(1, new Monster(animationMonster, displaySize.x - 1, rnd.nextInt((int) (displaySize.y - animationMonster.getHeight())), -3, 0) {
+                    Monster monster = new Monster(animationMonster, -3, 0) {
                         @Override
                         public boolean onCollision(InterfaceSpriteMaterial sprite) {
                             boolean r = super.onCollision(sprite);
@@ -83,7 +85,9 @@ public class MainActivity extends GameActivity {
                             }
                             return r;
                         }
-                    });
+                    };
+                    setPositionPTR(monster, 0F, rnd.nextInt(85) / 100, ALIGN_LEFT);
+                    drawSprite.addSprite(1, monster);
                 }
                 handler.postDelayed(this, rnd.nextInt(10000));
             }
