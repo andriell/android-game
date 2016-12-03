@@ -116,20 +116,24 @@ public class GameActivity extends Activity {
     //</editor-fold>
 
     //<editor-fold desc="createButton">
-    public SpriteButton createButtonP(int idNormal, float height) {
-        return new SpriteButton(createBitmapP(idNormal, 0F, height));
+    public SpriteButtonBitmap createButtonP() {
+        return new SpriteButtonBitmap();
     }
 
-    public SpriteButton createButtonP(int idNormal, float width, float height) {
-        return new SpriteButton(createBitmapP(idNormal, width, height));
+    public SpriteButtonBitmap createButtonP(int idNormal, float height) {
+        return new SpriteButtonBitmap(createBitmapP(idNormal, 0F, height));
     }
 
-    public SpriteButton createButtonP(int idNormal, int idPressed, float height) {
-        return new SpriteButton(createBitmapP(idNormal, 0F, height), createBitmapP(idPressed, 0F, height));
+    public SpriteButtonBitmap createButtonP(int idNormal, float width, float height) {
+        return new SpriteButtonBitmap(createBitmapP(idNormal, width, height));
     }
 
-    public SpriteButton createButtonP(int idNormal, int idPressed, float width, float height) {
-        return new SpriteButton(createBitmapP(idNormal, width, height), createBitmapP(idPressed, width, height));
+    public SpriteButtonBitmap createButtonP(int idNormal, int idPressed, float height) {
+        return new SpriteButtonBitmap(createBitmapP(idNormal, 0F, height), createBitmapP(idPressed, 0F, height));
+    }
+
+    public SpriteButtonBitmap createButtonP(int idNormal, int idPressed, float width, float height) {
+        return new SpriteButtonBitmap(createBitmapP(idNormal, width, height), createBitmapP(idPressed, width, height));
     }
     //</editor-fold>
 

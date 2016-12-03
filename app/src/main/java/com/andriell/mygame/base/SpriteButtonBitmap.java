@@ -7,29 +7,29 @@ import android.view.MotionEvent;
  * Created by Андрей on 01.12.2016.
  */
 
-public class SpriteButton extends SpriteBitmap implements InterfaceSpriteTouchListener {
+public class SpriteButtonBitmap extends SpriteBitmap implements InterfaceSpriteTouchListener {
     protected Bitmap bitmapNormal = null;
     protected Bitmap bitmapPressed = null;
-    protected DownListener downListener;
-    protected UpListener upListener;
+    protected InterfaceSpriteButtonDownListener downListener;
+    protected InterfaceSpriteButtonUpListener upListener;
 
-    public SpriteButton() {
+    public SpriteButtonBitmap() {
         this(null, null, 0F, 0F);
     }
 
-    public SpriteButton(Bitmap bitmapNormal) {
+    public SpriteButtonBitmap(Bitmap bitmapNormal) {
         this(bitmapNormal, null, 0F, 0F);
     }
 
-    public SpriteButton(Bitmap bitmapNormal, float x, float y) {
+    public SpriteButtonBitmap(Bitmap bitmapNormal, float x, float y) {
         this(bitmapNormal, null, x, y);
     }
 
-    public SpriteButton(Bitmap bitmapNormal, Bitmap bitmapPressed) {
+    public SpriteButtonBitmap(Bitmap bitmapNormal, Bitmap bitmapPressed) {
         this(bitmapNormal, bitmapPressed, 0F, 0F);
     }
 
-    public SpriteButton(Bitmap bitmapNormal, Bitmap bitmapPressed, float x, float y) {
+    public SpriteButtonBitmap(Bitmap bitmapNormal, Bitmap bitmapPressed, float x, float y) {
         this.bitmap = bitmapNormal;
         this.x = x;
         this.y = y;
@@ -56,11 +56,11 @@ public class SpriteButton extends SpriteBitmap implements InterfaceSpriteTouchLi
         return true;
     }
 
-    public DownListener getDownListener() {
+    public InterfaceSpriteButtonDownListener getDownListener() {
         return downListener;
     }
 
-    public void setDownListener(DownListener downListener) {
+    public void setDownListener(InterfaceSpriteButtonDownListener downListener) {
         this.downListener = downListener;
     }
 
@@ -80,19 +80,12 @@ public class SpriteButton extends SpriteBitmap implements InterfaceSpriteTouchLi
         this.bitmapPressed = bitmapPressed;
     }
 
-    public UpListener getUpListener() {
+    public InterfaceSpriteButtonUpListener getUpListener() {
         return upListener;
     }
 
-    public void setUpListener(UpListener upListener) {
+    public void setUpListener(InterfaceSpriteButtonUpListener upListener) {
         this.upListener = upListener;
     }
 
-    public static interface DownListener {
-        public boolean onDown(MotionEvent e);
-    }
-
-    public static interface UpListener {
-        public boolean onUp(MotionEvent e);
-    }
 }

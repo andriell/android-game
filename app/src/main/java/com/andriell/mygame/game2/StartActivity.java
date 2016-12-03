@@ -9,7 +9,8 @@ import android.view.MotionEvent;
 import com.andriell.mygame.R;
 import com.andriell.mygame.base.DrawSprite;
 import com.andriell.mygame.base.GameActivity;
-import com.andriell.mygame.base.SpriteButton;
+import com.andriell.mygame.base.InterfaceSpriteButtonUpListener;
+import com.andriell.mygame.base.SpriteButtonBitmap;
 import com.andriell.mygame.base.SpriteColor;
 
 public class StartActivity extends GameActivity {
@@ -22,9 +23,9 @@ public class StartActivity extends GameActivity {
         DrawSprite drawSprite = new DrawSprite(this, 2);
         drawSprite.addSprite(0, new SpriteColor(Color.WHITE));
 
-        SpriteButton spriteButton = createButtonP(R.drawable.start1, R.drawable.start2, 0.2F);
-        setPositionCenter(spriteButton);
-        spriteButton.setUpListener(new SpriteButton.UpListener() {
+        SpriteButtonBitmap spriteButtonBitmap = createButtonP(R.drawable.start1, R.drawable.start2, 0.2F);
+        setPositionCenter(spriteButtonBitmap);
+        spriteButtonBitmap.setUpListener(new InterfaceSpriteButtonUpListener() {
             @Override
             public boolean onUp(MotionEvent e) {
                 Intent intent = new Intent(StartActivity.this, MainActivity.class);
@@ -32,7 +33,7 @@ public class StartActivity extends GameActivity {
                 return true;
             }
         });
-        drawSprite.addSprite(1, spriteButton);
+        drawSprite.addSprite(1, spriteButtonBitmap);
 
         setContentView(drawSprite);
     }
