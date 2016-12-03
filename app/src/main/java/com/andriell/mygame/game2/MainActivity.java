@@ -148,6 +148,7 @@ public class MainActivity extends GameActivity {
 
         @Override
         public boolean onDraw(Canvas c) {
+            super.onDraw(c);
             if (x <= 0) {
                 setX(1F);
                 setSpeedX(0F);
@@ -155,7 +156,6 @@ public class MainActivity extends GameActivity {
                 setX(displaySize.x - getWidth() - 1);
                 setSpeedX(0F);
             }
-            super.onDraw(c);
             return true;
         }
 
