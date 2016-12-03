@@ -53,6 +53,24 @@ public class GameActivity extends Activity {
         getWindowManager().getDefaultDisplay().getSize(displaySize);
     }
 
+    //<editor-fold desc="widthP heightP">
+    public float xP(float p) {
+        return displaySize.x * p;
+    }
+
+    public float widthP(float p) {
+        return displaySize.x * p;
+    }
+
+    public float yP(float p) {
+        return displaySize.y * p;
+    }
+
+    public float heightP(float p) {
+        return displaySize.y * p;
+    }
+    //</editor-fold>
+
     //<editor-fold desc="createBitmap">
     public Bitmap createBitmapP(int id) {
         return createBitmapP(id, 0F, 0F);
@@ -134,53 +152,53 @@ public class GameActivity extends Activity {
     //</editor-fold>
 
     //<editor-fold desc="setPosition">
-    public void setPositionCenter(InterfaceSpriteSetPosition material) {
+    public void setPositionCenter(InterfaceSpritePositioned material) {
         setPositionP(material, 0.5F, 0.5F, -1F, -1F, ALIGN_CENTER, ALIGN_CENTER);
     }
 
-    public void setPositionPTR(InterfaceSpriteSetPosition material, float top, float right, final int align1) {
+    public void setPositionPTR(InterfaceSpritePositioned material, float top, float right, final int align1) {
         setPositionP(material, top, right, -1F, -1F, align1, ALIGN_CENTER);
     }
-    public void setPositionPBR(InterfaceSpriteSetPosition material, float bottom, float right, final int align1) {
+    public void setPositionPBR(InterfaceSpritePositioned material, float bottom, float right, final int align1) {
         setPositionP(material, -1F, right, bottom, -1F, align1, ALIGN_CENTER);
     }
-    public void setPositionPTL(InterfaceSpriteSetPosition material, float top, float left, final int align1) {
+    public void setPositionPTL(InterfaceSpritePositioned material, float top, float left, final int align1) {
         setPositionP(material, top, -1F, -1F, left, align1, ALIGN_CENTER);
     }
-    public void setPositionPBL(InterfaceSpriteSetPosition material, float bottom, float left, final int align1) {
+    public void setPositionPBL(InterfaceSpritePositioned material, float bottom, float left, final int align1) {
         setPositionP(material, -1F, -1F, bottom, left, align1, ALIGN_CENTER);
     }
 
-    public void setPositionPTR(InterfaceSpriteSetPosition material, float top, float right, final int align1, final int align2) {
+    public void setPositionPTR(InterfaceSpritePositioned material, float top, float right, final int align1, final int align2) {
         setPositionP(material, top, right, -1F, -1F, align1, align2);
     }
-    public void setPositionPBR(InterfaceSpriteSetPosition material, float bottom, float right, final int align1, final int align2) {
+    public void setPositionPBR(InterfaceSpritePositioned material, float bottom, float right, final int align1, final int align2) {
         setPositionP(material, -1F, right, bottom, -1F, align1, align2);
     }
-    public void setPositionPTL(InterfaceSpriteSetPosition material, float top, float left, final int align1, final int align2) {
+    public void setPositionPTL(InterfaceSpritePositioned material, float top, float left, final int align1, final int align2) {
         setPositionP(material, top, -1F, -1F, left, align1, align2);
     }
-    public void setPositionPBL(InterfaceSpriteSetPosition material, float bottom, float left, final int align1, final int align2) {
+    public void setPositionPBL(InterfaceSpritePositioned material, float bottom, float left, final int align1, final int align2) {
         setPositionP(material, -1F, -1F, bottom, left, align1, align2);
     }
 
-    public void setPositionPTR(InterfaceSpriteSetPosition material, float top, float right) {
+    public void setPositionPTR(InterfaceSpritePositioned material, float top, float right) {
         setPositionP(material, top, right, -1F, -1F, ALIGN_RIGHT, ALIGN_TOP);
     }
-    public void setPositionPBR(InterfaceSpriteSetPosition material, float bottom, float right) {
+    public void setPositionPBR(InterfaceSpritePositioned material, float bottom, float right) {
         setPositionP(material, -1F, right, bottom, -1F, ALIGN_RIGHT, ALIGN_BOTTOM);
     }
-    public void setPositionPTL(InterfaceSpriteSetPosition material, float top, float left) {
+    public void setPositionPTL(InterfaceSpritePositioned material, float top, float left) {
         setPositionP(material, top, -1F, -1F, left, ALIGN_LEFT, ALIGN_TOP);
     }
-    public void setPositionPBL(InterfaceSpriteSetPosition material, float bottom, float left) {
+    public void setPositionPBL(InterfaceSpritePositioned material, float bottom, float left) {
         setPositionP(material, -1F, -1F, bottom, left, ALIGN_LEFT, ALIGN_BOTTOM);
     }
 
-    public void setPositionP(InterfaceSpriteSetPosition material, float top, float right, float bottom, float left) {
+    public void setPositionP(InterfaceSpritePositioned material, float top, float right, float bottom, float left) {
         setPositionP(material, top, right, bottom, left, ALIGN_CENTER, ALIGN_CENTER);
     }
-    public void setPositionP(InterfaceSpriteSetPosition material, float top, float right, float bottom, float left, final int align1, final int align2) {
+    public void setPositionP(InterfaceSpritePositioned material, float top, float right, float bottom, float left, final int align1, final int align2) {
         if (right >= 0) {
             if (align1 == ALIGN_LEFT || align2 == ALIGN_LEFT) {
                 material.setX(displaySize.x - displaySize.x * right);

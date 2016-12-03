@@ -2,18 +2,18 @@ package com.andriell.mygame.base;
 
 import android.graphics.Canvas;
 
-public class SpriteMaterial implements InterfaceSpriteMaterial {
+public class SpritePositioned implements InterfaceSpritePositioned {
     protected float x = 0;
     protected float y = 0;
     protected float width = 0;
     protected float height = 0;
 
-    public SpriteMaterial(float x, float y) {
+    public SpritePositioned(float x, float y) {
         this.x = x;
         this.y = y;
     }
 
-    public SpriteMaterial(float x, float y, float width, float height) {
+    public SpritePositioned(float x, float y, float width, float height) {
         this.x = x;
         this.y = y;
         this.width = width;

@@ -3,16 +3,27 @@ package com.andriell.mygame.base;
 import android.graphics.Canvas;
 
 
-public class SpriteAnimation extends SpriteMaterial {
+public class SpriteAnimation extends SpritePositioned {
     Animation animation;
+
+    public SpriteAnimation() {
+        this(null, 0F, 0F);
+    }
+
+    public SpriteAnimation(Animation animation) {
+        this(animation, 0F, 0F);
+    }
 
     public SpriteAnimation(Animation animation, float x, float y) {
         super(x, y, animation.getWidth(), animation.getHeight());
         this.animation = animation;
     }
 
-    public SpriteAnimation(Animation animation) {
-        super(0, 0, animation.getWidth(), animation.getHeight());
+    public Animation getAnimation() {
+        return animation;
+    }
+
+    public void setAnimation(Animation animation) {
         this.animation = animation;
     }
 

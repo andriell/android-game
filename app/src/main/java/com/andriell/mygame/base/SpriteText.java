@@ -7,7 +7,7 @@ import android.graphics.Paint;
  * Created by Андрей on 30.11.2016.
  */
 
-public class SpriteText implements InterfaceSpriteSetPosition {
+public class SpriteText implements InterfaceSpritePositioned {
     private Paint paint;
     private Paint paintStroke;
     private String text = "";

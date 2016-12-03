@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 
 import com.andriell.mygame.base.Animation;
 import com.andriell.mygame.base.InterfaceSpriteCollisionListener;
-import com.andriell.mygame.base.InterfaceSpriteMaterial;
+import com.andriell.mygame.base.InterfaceSpriteCollisionTarget;
 import com.andriell.mygame.base.SpriteRunnerAnimation;
 
 public class Monster extends SpriteRunnerAnimation implements InterfaceSpriteCollisionListener {
@@ -15,7 +15,7 @@ public class Monster extends SpriteRunnerAnimation implements InterfaceSpriteCol
     }
 
     @Override
-    public boolean onCollision(InterfaceSpriteMaterial sprite) {
+    public boolean onCollision(InterfaceSpriteCollisionTarget sprite) {
         if (isDead) {
             return false;
         }

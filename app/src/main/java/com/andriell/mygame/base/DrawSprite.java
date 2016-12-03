@@ -5,9 +5,7 @@ import android.graphics.Canvas;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import java.util.AbstractSet;
 import java.util.Iterator;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Created by Rybalko on 24.11.2016.
@@ -15,13 +13,13 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class DrawSprite extends DrawView {
     private VeryFastSet<InterfaceSprite>[] sprites;
-    private VeryFastSet<InterfaceSpriteMaterial> spritesMaterial;
+    private VeryFastSet<InterfaceSpriteCollisionTarget> spritesMaterial;
     private VeryFastSet<InterfaceSpriteCollisionListener> spritesCollision;
     private VeryFastSet<InterfaceSpriteTouchListener> spritesTouchListener;
 
     public DrawSprite(Context context, int zSize) {
         super(context);
-        spritesMaterial = new VeryFastSet<InterfaceSpriteMaterial>();
+        spritesMaterial = new VeryFastSet<InterfaceSpriteCollisionTarget>();
         spritesCollision = new VeryFastSet<InterfaceSpriteCollisionListener>();
         spritesTouchListener = new VeryFastSet<InterfaceSpriteTouchListener>();
         sprites = new VeryFastSet[zSize];
@@ -37,8 +35,8 @@ public class DrawSprite extends DrawView {
         sprites[z].add(s);
         if (s instanceof InterfaceSpriteCollisionListener) {
             spritesCollision.add((InterfaceSpriteCollisionListener) s);
-        } else if (s instanceof InterfaceSpriteMaterial) {
-            spritesMaterial.add((InterfaceSpriteMaterial) s);
+        } else if (s instanceof InterfaceSpriteCollisionTarget) {
+            spritesMaterial.add((InterfaceSpriteCollisionTarget) s);
         }
         if (s instanceof InterfaceSpriteTouchListener) {
             spritesTouchListener.add((InterfaceSpriteTouchListener) s);
@@ -51,8 +49,8 @@ public class DrawSprite extends DrawView {
         }
         if (s instanceof InterfaceSpriteCollisionListener) {
             spritesCollision.remove((InterfaceSpriteCollisionListener) s);
-        } else if (s instanceof InterfaceSpriteMaterial) {
-            spritesMaterial.remove((InterfaceSpriteMaterial) s);
+        } else if (s instanceof InterfaceSpriteCollisionTarget) {
+            spritesMaterial.remove((InterfaceSpriteCollisionTarget) s);
         }
         if (s instanceof InterfaceSpriteTouchListener) {
             spritesTouchListener.remove((InterfaceSpriteTouchListener) s);
@@ -108,9 +106,9 @@ public class DrawSprite extends DrawView {
                 Iterator<InterfaceSpriteCollisionListener> iteratorCollision = spritesCollision.iterator();
                 while (iteratorCollision.hasNext()) {
                     InterfaceSpriteCollisionListener listener = iteratorCollision.next();
-                    Iterator<InterfaceSpriteMaterial> iteratorMaterial = spritesMaterial.iterator();
+                    Iterator<InterfaceSpriteCollisionTarget> iteratorMaterial = spritesMaterial.iterator();
                     while (iteratorMaterial.hasNext()) {
-                        InterfaceSpriteMaterial material = iteratorMaterial.next();
+                        InterfaceSpriteCollisionTarget material = iteratorMaterial.next();
                         if (listener.equals(material)) {
                             continue;
                         }

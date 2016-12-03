@@ -9,7 +9,7 @@ import android.view.MotionEvent;
 
 import com.andriell.mygame.base.Animation;
 import com.andriell.mygame.base.GameActivity;
-import com.andriell.mygame.base.InterfaceSpriteMaterial;
+import com.andriell.mygame.base.InterfaceSpriteCollisionTarget;
 import com.andriell.mygame.base.SpriteColor;
 import com.andriell.mygame.base.DrawSprite;
 import com.andriell.mygame.game.Bullet;
@@ -78,7 +78,7 @@ public class MainActivity extends GameActivity {
                 if (isRun) {
                     Monster monster = new Monster(animationMonster, -3, 0) {
                         @Override
-                        public boolean onCollision(InterfaceSpriteMaterial sprite) {
+                        public boolean onCollision(InterfaceSpriteCollisionTarget sprite) {
                             boolean r = super.onCollision(sprite);
                             if (!r) {
                                 count.count();
