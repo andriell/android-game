@@ -72,13 +72,13 @@ public class MainActivity extends GameActivity {
         @Override
         public boolean onDown(MotionEvent e) {
             player.toRight();
-            return false;
+            return true;
         }
 
         @Override
         public boolean onUp(MotionEvent e) {
             player.toNormal();
-            return false;
+            return true;
         }
     }
 
@@ -86,13 +86,13 @@ public class MainActivity extends GameActivity {
         @Override
         public boolean onDown(MotionEvent e) {
             player.toLeft();
-            return false;
+            return true;
         }
 
         @Override
         public boolean onUp(MotionEvent e) {
             player.toNormal();
-            return false;
+            return true;
         }
     }
 
