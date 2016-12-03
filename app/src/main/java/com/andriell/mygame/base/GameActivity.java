@@ -240,4 +240,18 @@ public class GameActivity extends Activity {
         }
     }
     //</editor-fold>
+
+    public void setSizeP(InterfaceSpriteResize resize, float width, float height) {
+        if (width > 0 && height > 0) {
+            resize.setWidth(displaySize.x * width);
+            resize.setHeight(displaySize.y * height);
+        } else if (width > 0) {
+            resize.setWidth(displaySize.x * width);
+            resize.setHeight((resize.getHeight() * displaySize.x * width) / resize.getWidth());
+
+        } else if (height > 0) {
+            resize.setWidth((resize.getWidth() * displaySize.y * height) / resize.getHeight());
+            resize.setHeight(displaySize.y * height);
+        }
+    }
 }

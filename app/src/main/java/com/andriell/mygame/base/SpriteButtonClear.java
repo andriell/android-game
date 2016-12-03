@@ -1,6 +1,6 @@
 package com.andriell.mygame.base;
 
-import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.MotionEvent;
 
 /**
@@ -11,8 +11,23 @@ public class SpriteButtonClear extends SpriteResize implements InterfaceSpriteTo
     protected InterfaceSpriteButtonDownListener downListener;
     protected InterfaceSpriteButtonUpListener upListener;
 
+    public SpriteButtonClear() {}
+
+    public SpriteButtonClear(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public SpriteButtonClear(float x, float y, float width, float height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent e) {
+        Log.i("SpriteButtonClear", Integer.toString(e.getAction()));
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
             if (downListener != null) {
                 return downListener.onDown(e);

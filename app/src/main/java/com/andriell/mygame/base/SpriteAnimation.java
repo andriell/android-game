@@ -32,7 +32,7 @@ public class SpriteAnimation extends SpritePositioned {
     @Override
     public float getHeight() {
         if (animation == null) {
-            return 0F;
+            return height;
         }
         return animation.getHeight();
     }
@@ -40,7 +40,7 @@ public class SpriteAnimation extends SpritePositioned {
     @Override
     public float getWidth() {
         if (animation == null) {
-            return 0F;
+            return width;
         }
         return animation.getWidth();
     }

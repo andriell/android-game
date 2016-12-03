@@ -1,6 +1,7 @@
 package com.andriell.mygame.game2;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -9,10 +10,12 @@ import com.andriell.mygame.R;
 import com.andriell.mygame.base.Animation;
 import com.andriell.mygame.base.DrawSprite;
 import com.andriell.mygame.base.GameActivity;
+import com.andriell.mygame.base.InterfaceSpriteButtonDownListener;
+import com.andriell.mygame.base.InterfaceSpriteButtonUpListener;
 import com.andriell.mygame.base.InterfaceSpriteCollisionListener;
 import com.andriell.mygame.base.InterfaceSpriteCollisionTarget;
 import com.andriell.mygame.base.SpriteAnimation;
-import com.andriell.mygame.base.SpriteButtonBitmap;
+import com.andriell.mygame.base.SpriteButtonClear;
 import com.andriell.mygame.base.SpriteColor;
 import com.andriell.mygame.base.SpriteRunnerAnimation;
 
@@ -29,15 +32,43 @@ public class MainActivity extends GameActivity {
         drawSprite = new DrawSprite(this, 3);
         drawSprite.addSprite(0, new SpriteColor(Color.GREEN));
         player = new Player();
-        setPositionCenter(player);
+        setPositionPBL(player, 0.01F, 0.5F, ALIGN_CENTER, ALIGN_BOTTOM);
         drawSprite.addSprite(1, player);
 
-        SpriteButtonBitmap button = createButtonP();
+        OnLeft toLeft = new OnLeft();
+        SpriteButtonClear buttonLeft = new SpriteButtonClear();
+        setSizeP(buttonLeft, 0.5F, 0.2F);
+        setPositionPBL(buttonLeft, 0F, 0F);
+        buttonLeft.setDownListener(toLeft);
+        buttonLeft.setUpListener(toLeft);
+        drawSprite.addSprite(2, buttonLeft);
+
+        OnRight toRight = new OnRight();
+        SpriteButtonClear buttonRight = new SpriteButtonClear();
+        setSizeP(buttonRight, 0.5F, 0.2F);
+        setPositionPBR(buttonRight, 0F, 0F);
+        buttonRight.setDownListener(toRight);
+        buttonRight.setUpListener(toRight);
+        drawSprite.addSprite(2, buttonRight);
+
+        OnFire onFire = new OnFire();
+        SpriteButtonClear buttonFire = new SpriteButtonClear();
+        setSizeP(buttonFire, 1F, 0.8F);
+        setPositionPTL(buttonFire, 0F, 0F);
+        buttonFire.setDownListener(onFire);
+        drawSprite.addSprite(2, buttonFire);
 
         setContentView(drawSprite);
     }
 
-    class ToRight implements SpriteButtonBitmap.DownListener, SpriteButtonBitmap.UpListener {
+    class OnFire implements InterfaceSpriteButtonDownListener {
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return false;
+        }
+    }
+
+    class OnRight implements InterfaceSpriteButtonUpListener, InterfaceSpriteButtonDownListener {
         @Override
         public boolean onDown(MotionEvent e) {
             player.toRight();
@@ -51,7 +82,7 @@ public class MainActivity extends GameActivity {
         }
     }
 
-    class ToLeft implements SpriteButtonBitmap.DownListener, SpriteButtonBitmap.UpListener {
+    class OnLeft implements InterfaceSpriteButtonUpListener, InterfaceSpriteButtonDownListener {
         @Override
         public boolean onDown(MotionEvent e) {
             player.toLeft();
@@ -64,8 +95,6 @@ public class MainActivity extends GameActivity {
             return false;
         }
     }
-
-
 
     class Fireball extends SpriteAnimation implements InterfaceSpriteCollisionTarget {
         public Fireball() {
@@ -103,18 +132,31 @@ public class MainActivity extends GameActivity {
         }
 
         public void toLeft() {
-            setSpeedX(xP(0.01F));
+            setSpeedX(xP(-0.01F));
             setAnimation(animationLeft);
         }
 
         public void toRight() {
-            setSpeedX(xP(-0.01F));
+            setSpeedX(xP(0.01F));
             setAnimation(animationRight);
         }
 
         public void toNormal() {
             setSpeedX(0F);
             setAnimation(animationNormal);
+        }
+
+        @Override
+        public boolean onDraw(Canvas c) {
+            if (x <= 0) {
+                setX(1F);
+                setSpeedX(0F);
+            } else if (x >= displaySize.x - getWidth()) {
+                setX(displaySize.x - getWidth() - 1);
+                setSpeedX(0F);
+            }
+            super.onDraw(c);
+            return true;
         }
 
         @Override
