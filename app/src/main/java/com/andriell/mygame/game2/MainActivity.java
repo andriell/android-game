@@ -1,17 +1,19 @@
 package com.andriell.mygame.game2;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.andriell.mygame.R;
 import com.andriell.mygame.base.Animation;
 import com.andriell.mygame.base.DrawSprite;
 import com.andriell.mygame.base.GameActivity;
+import com.andriell.mygame.base.SpriteColor;
 import com.andriell.mygame.base.SpriteRunnerAnimation;
 
 public class MainActivity extends GameActivity {
-    DrawSprite drawSprite = new DrawSprite(this, 2);
-    Player player = new Player();
+    DrawSprite drawSprite;
+    Player player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +21,10 @@ public class MainActivity extends GameActivity {
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        drawSprite = new DrawSprite(this, 3);
+        drawSprite.addSprite(0, new SpriteColor(Color.GREEN));
+        player = new Player();
+        setPositionCenter(player);
         drawSprite.addSprite(1, player);
     }
 

@@ -22,7 +22,9 @@ public class SpriteRunnerAnimation extends SpriteAnimation {
         this(animation, 0F, 0F, speedX, speedY);
     }
     public SpriteRunnerAnimation(Animation animation, float x, float y, float speedX, float speedY) {
-        super(animation, x, y);
+        this.animation = animation;
+        this.x = x;
+        this.y = y;
         this.speedX = speedX;
         this.speedY = speedY;
     }

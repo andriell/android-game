@@ -13,6 +13,10 @@ public class SpriteButton extends SpriteBitmap implements InterfaceSpriteTouchLi
     protected DownListener downListener;
     protected UpListener upListener;
 
+    public SpriteButton() {
+        this(null, null, 0F, 0F);
+    }
+
     public SpriteButton(Bitmap bitmapNormal) {
         this(bitmapNormal, null, 0F, 0F);
     }
@@ -26,7 +30,9 @@ public class SpriteButton extends SpriteBitmap implements InterfaceSpriteTouchLi
     }
 
     public SpriteButton(Bitmap bitmapNormal, Bitmap bitmapPressed, float x, float y) {
-        super(bitmapNormal, x, y);
+        this.bitmap = bitmapNormal;
+        this.x = x;
+        this.y = y;
         this.bitmapNormal = bitmapNormal;
         this.bitmapPressed = bitmapPressed;
     }

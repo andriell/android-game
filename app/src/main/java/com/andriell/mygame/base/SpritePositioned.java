@@ -8,6 +8,8 @@ public class SpritePositioned implements InterfaceSpritePositioned {
     protected float width = 0;
     protected float height = 0;
 
+    public SpritePositioned() {}
+
     public SpritePositioned(float x, float y) {
         this.x = x;
         this.y = y;

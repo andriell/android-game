@@ -12,6 +12,8 @@ public class Animation {
     protected long startTime = 0L;
     protected float speed = 1F;
 
+    public Animation() {}
+
     public Animation(Bitmap bitMap) {
         this.bitMap = new Bitmap[1];
         this.bitMap[0] = bitMap;
@@ -41,6 +43,9 @@ public class Animation {
     }
 
     public Bitmap getBitmap() {
+        if (bitMap == null) {
+            return null;
+        }
         if (bitMap.length == 1) {
             return bitMap[0];
         }
@@ -57,6 +62,22 @@ public class Animation {
         }
         startTime = System.currentTimeMillis();
         return bitMap[0];
+    }
+
+    public Bitmap[] getBitMap() {
+        return bitMap;
+    }
+
+    public void setBitMap(Bitmap[] bitMap) {
+        this.bitMap = bitMap;
+    }
+
+    public int[] getTimeMap() {
+        return timeMap;
+    }
+
+    public void setTimeMap(int[] timeMap) {
+        this.timeMap = timeMap;
     }
 
     public float getWidth() {

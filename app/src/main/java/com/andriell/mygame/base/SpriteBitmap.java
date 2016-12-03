@@ -16,8 +16,25 @@ public class SpriteBitmap extends SpritePositioned {
     }
 
     public SpriteBitmap(Bitmap bitmap, float x, float y) {
-        super(x, y, bitmap.getWidth(), bitmap.getHeight());
+        this.x = x;
+        this.y = y;
         this.bitmap = bitmap;
+    }
+
+    @Override
+    public float getHeight() {
+        if (bitmap == null) {
+            return 0F;
+        }
+        return bitmap.getHeight();
+    }
+
+    @Override
+    public float getWidth() {
+        if (bitmap == null) {
+            return 0F;
+        }
+        return bitmap.getWidth();
     }
 
     public Bitmap getBitmap() {

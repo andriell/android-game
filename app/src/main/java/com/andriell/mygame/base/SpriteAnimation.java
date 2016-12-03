@@ -15,7 +15,9 @@ public class SpriteAnimation extends SpritePositioned {
     }
 
     public SpriteAnimation(Animation animation, float x, float y) {
-        super(x, y, animation.getWidth(), animation.getHeight());
+        this.animation = animation;
+        this.x = x;
+        this.y = y;
         this.animation = animation;
     }
 
@@ -28,8 +30,26 @@ public class SpriteAnimation extends SpritePositioned {
     }
 
     @Override
+    public float getHeight() {
+        if (animation == null) {
+            return 0F;
+        }
+        return animation.getHeight();
+    }
+
+    @Override
+    public float getWidth() {
+        if (animation == null) {
+            return 0F;
+        }
+        return animation.getWidth();
+    }
+
+    @Override
     public boolean onDraw(Canvas c) {
-        c.drawBitmap(animation.getBitmap(), x, y, null);
-        return !(width + x < 0 || height + y < 0 || x > c.getWidth() || y > c.getHeight());
+        if (animation != null) {
+            c.drawBitmap(animation.getBitmap(), x, y, null);
+        }
+        return !(getWidth() + x < 0 || getHeight() + y < 0 || x > c.getWidth() || y > c.getHeight());
     }
 }

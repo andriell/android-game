@@ -11,8 +11,22 @@ public class SpriteRunnerBitmap extends SpriteBitmap {
     protected float xSpeed = 0;
     protected float ySpeed = 0;
 
+    public SpriteRunnerBitmap() {
+        this(null, 0F, 0F, 0F, 0F);
+    }
+
+    public SpriteRunnerBitmap(Bitmap bitmap) {
+        this(bitmap, 0F, 0F, 0F, 0F);
+    }
+
+    public SpriteRunnerBitmap(Bitmap bitmap, float speedX, float speedY) {
+        this(bitmap, 0F, 0F, speedX, speedY);
+    }
+
     public SpriteRunnerBitmap(Bitmap bitmap, float x, float y, float xSpeed, float ySpeed) {
-        super(bitmap, x, y);
+        this.bitmap = bitmap;
+        this.x = x;
+        this.y = y;
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
     }

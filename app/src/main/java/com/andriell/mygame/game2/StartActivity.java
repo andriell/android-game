@@ -24,9 +24,9 @@ public class StartActivity extends GameActivity {
 
         SpriteButton spriteButton = createButtonP(R.drawable.start1, R.drawable.start2, 0.2F);
         setPositionCenter(spriteButton);
-        spriteButton.setDownListener(new SpriteButton.DownListener() {
+        spriteButton.setUpListener(new SpriteButton.UpListener() {
             @Override
-            public boolean onDown(MotionEvent e) {
+            public boolean onUp(MotionEvent e) {
                 Intent intent = new Intent(StartActivity.this, MainActivity.class);
                 startActivity(intent);
                 return true;
