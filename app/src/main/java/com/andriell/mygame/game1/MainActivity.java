@@ -1,4 +1,4 @@
-package com.andriell.mygame;
+package com.andriell.mygame.game1;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -7,15 +7,16 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.andriell.mygame.R;
 import com.andriell.mygame.base.Animation;
 import com.andriell.mygame.base.GameActivity;
 import com.andriell.mygame.base.InterfaceSpriteCollisionTarget;
 import com.andriell.mygame.base.SpriteColor;
 import com.andriell.mygame.base.DrawSprite;
-import com.andriell.mygame.game.Bullet;
-import com.andriell.mygame.game.Count;
-import com.andriell.mygame.game.Monster;
-import com.andriell.mygame.game.Player;
+import com.andriell.mygame.game1.Bullet;
+import com.andriell.mygame.game1.Count;
+import com.andriell.mygame.game1.Monster;
+import com.andriell.mygame.game1.Player;
 
 import java.util.Random;
 

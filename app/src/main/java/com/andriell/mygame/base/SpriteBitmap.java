@@ -30,7 +30,9 @@ public class SpriteBitmap extends SpritePositioned {
 
     @Override
     public boolean onDraw(Canvas c) {
-        c.drawBitmap(bitmap, x, y, null);
+        if (bitmap != null) {
+            c.drawBitmap(bitmap, x, y, null);
+        }
         return !(width + x < 0 || height + y < 0 || x > c.getWidth() || y > c.getHeight());
     }
 }

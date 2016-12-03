@@ -8,9 +8,10 @@ import android.view.MotionEvent;
  */
 
 public class SpriteButton extends SpriteBitmap implements InterfaceSpriteTouchListener {
-    Bitmap bitmapNormal = null;
-    Bitmap bitmapPressed = null;
-    DownListener downListener;
+    protected Bitmap bitmapNormal = null;
+    protected Bitmap bitmapPressed = null;
+    protected DownListener downListener;
+    protected UpListener upListener;
 
     public SpriteButton(Bitmap bitmapNormal) {
         this(bitmapNormal, null, 0F, 0F);
@@ -38,9 +39,14 @@ public class SpriteButton extends SpriteBitmap implements InterfaceSpriteTouchLi
                 return downListener.onDown(e);
             }
             return true;
-        } else {
-            bitmap = bitmapNormal;
+        } else if (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL) {
+            if (upListener != null) {
+                return upListener.onUp(e);
+            }
+            return true;
         }
+        bitmap = bitmapNormal;
+
         return true;
     }
 
@@ -52,7 +58,35 @@ public class SpriteButton extends SpriteBitmap implements InterfaceSpriteTouchLi
         this.downListener = downListener;
     }
 
+    public Bitmap getBitmapNormal() {
+        return bitmapNormal;
+    }
+
+    public void setBitmapNormal(Bitmap bitmapNormal) {
+        this.bitmapNormal = bitmapNormal;
+    }
+
+    public Bitmap getBitmapPressed() {
+        return bitmapPressed;
+    }
+
+    public void setBitmapPressed(Bitmap bitmapPressed) {
+        this.bitmapPressed = bitmapPressed;
+    }
+
+    public UpListener getUpListener() {
+        return upListener;
+    }
+
+    public void setUpListener(UpListener upListener) {
+        this.upListener = upListener;
+    }
+
     public static interface DownListener {
         public boolean onDown(MotionEvent e);
+    }
+
+    public static interface UpListener {
+        public boolean onUp(MotionEvent e);
     }
 }

@@ -1,24 +1,22 @@
-package com.andriell.mygame;
+package com.andriell.mygame.game2;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
 
+import com.andriell.mygame.R;
 import com.andriell.mygame.base.Animation;
 import com.andriell.mygame.base.DrawSprite;
 import com.andriell.mygame.base.GameActivity;
 import com.andriell.mygame.base.SpriteRunnerAnimation;
-import com.andriell.mygame.game.Bullet;
 
-public class MainActivity2 extends GameActivity {
+public class MainActivity extends GameActivity {
     DrawSprite drawSprite = new DrawSprite(this, 2);
     Player player = new Player();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // если хотим, чтобы приложение постоянно имело портретную ориентацию
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         drawSprite.addSprite(1, player);

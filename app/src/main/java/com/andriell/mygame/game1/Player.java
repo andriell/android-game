@@ -1,4 +1,4 @@
-package com.andriell.mygame.game;
+package com.andriell.mygame.game1;
 
 import android.graphics.Bitmap;
 
