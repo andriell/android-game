@@ -2,7 +2,6 @@ package com.andriell.mygame.game2;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
@@ -16,8 +15,8 @@ import com.andriell.mygame.base.InterfaceSpriteCollisionListener;
 import com.andriell.mygame.base.InterfaceSpriteCollisionTarget;
 import com.andriell.mygame.base.SpriteAnimation;
 import com.andriell.mygame.base.SpriteButtonClear;
-import com.andriell.mygame.base.SpriteColor;
 import com.andriell.mygame.base.SpriteRunnerAnimation;
+import com.andriell.mygame.base.SpriteSheetBitmap;
 
 public class MainActivity extends GameActivity {
     DrawSprite drawSprite;
@@ -30,7 +29,13 @@ public class MainActivity extends GameActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         drawSprite = new DrawSprite(this, 3);
-        drawSprite.addSprite(0, new SpriteColor(Color.GREEN));
+
+        SpriteSheetBitmap stars = new SpriteSheetBitmap();
+        setSizeP(stars, 1F, 1F);
+        setPositionPTL(stars, 0, 0);
+        stars.setBitmap(createBitmapP(R.drawable.stars1));
+        drawSprite.addSprite(0, stars);
+
         player = new Player();
         setPositionPBL(player, 0.01F, 0.5F, ALIGN_CENTER, ALIGN_BOTTOM);
         drawSprite.addSprite(1, player);
