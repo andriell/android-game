@@ -71,14 +71,20 @@ public class MainActivity extends GameActivity {
         setContentView(drawSprite);
     }
 
-    class OnFire implements InterfaceSpriteButtonDownListener {
+    class OnFire implements InterfaceSpriteButtonUpListener, InterfaceSpriteButtonDownListener {
         @Override
         public boolean onDown(MotionEvent e) {
+            int index = e.getActionIndex();
             Rocket rocket = new Rocket();
             rocket.setX(player.getX() + player.getWidth() / 2);
             rocket.setY(player.getY() - rocket.getHeight());
-            setSpeed(rocket, e.getX(), e.getY(), 10F);
+            setSpeed(rocket, e.getX(index), e.getY(index), 10F);
             drawSprite.addSprite(1, rocket);
+            return true;
+        }
+
+        @Override
+        public boolean onUp(MotionEvent e) {
             return true;
         }
     }
