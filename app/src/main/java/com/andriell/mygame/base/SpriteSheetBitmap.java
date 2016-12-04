@@ -13,16 +13,20 @@ public class SpriteSheetBitmap extends SpriteBitmap implements InterfaceSpriteRe
 
     @Override
     public boolean onDraw(Canvas c) {
-        x += speedX;
-        if (x >= width) {
-            x -= width;
-        }
-        y += speedY;
-        if (y >= height) {
-            y -= height;
-        }
         if (bitmap == null) {
             return true;
+        }
+        x += speedX;
+        if (x >= 0F) {
+            x -= bitmap.getWidth();
+        } else if (x < -bitmap.getWidth()) {
+            x += bitmap.getWidth();
+        }
+        y += speedY;
+        if (y >= 0F) {
+            y -= bitmap.getHeight();
+        }else if (y < -bitmap.getHeight()) {
+            y += bitmap.getHeight();
         }
         for (float left = x; left < width; left += bitmap.getWidth()) {
             for (float top = y; top < height; top += bitmap.getHeight()) {

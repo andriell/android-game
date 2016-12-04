@@ -34,6 +34,7 @@ public class MainActivity extends GameActivity {
         setSizeP(stars, 1F, 1F);
         setPositionPTL(stars, 0, 0);
         stars.setBitmap(createBitmapP(R.drawable.stars1));
+        stars.setSpeedY(yP(0.001F));
         drawSprite.addSprite(0, stars);
 
         player = new Player();
