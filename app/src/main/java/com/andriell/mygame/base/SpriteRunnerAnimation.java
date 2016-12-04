@@ -6,7 +6,7 @@ import android.graphics.Canvas;
  * Created by Андрей on 24.11.2016.
  */
 
-public class SpriteRunnerAnimation extends SpriteAnimation {
+public class SpriteRunnerAnimation extends SpriteAnimation implements InterfaceSpriteSetSpeed {
     protected float speedX = 0;
     protected float speedY = 0;
 

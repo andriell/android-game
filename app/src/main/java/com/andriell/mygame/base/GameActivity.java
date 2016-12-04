@@ -254,4 +254,16 @@ public class GameActivity extends Activity {
             resize.setHeight(displaySize.y * height);
         }
     }
+
+    public void setSpeed(InterfaceSpriteSetSpeed setSpeed, float x2, float y2, float speed) {
+        setSpeed(setSpeed, setSpeed.getX(), setSpeed.getY(), x2, y2, speed);
+    }
+
+    public void setSpeed(InterfaceSpriteSetSpeed setSpeed, float x1, float y1, float x2, float y2, float speed) {
+        float x = x2 - x1;
+        float y = y2 - y1;
+        float z = (float) Math.sqrt(x * x + y * y);
+        setSpeed.setSpeedX((speed * x) / z);
+        setSpeed.setSpeedY((speed * y) / z);
+    }
 }

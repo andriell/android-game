@@ -37,6 +37,10 @@ public class MainActivity extends GameActivity {
         stars.setSpeedY(yP(0.001F));
         drawSprite.addSprite(0, stars);
 
+        Fly fly = new Fly();
+        setPositionPTL(fly, 0.2F, 0.5F, ALIGN_CENTER, ALIGN_CENTER);
+        drawSprite.addSprite(1, fly);
+
         player = new Player();
         setPositionPBL(player, 0.01F, 0.5F, ALIGN_CENTER, ALIGN_BOTTOM);
         drawSprite.addSprite(1, player);
@@ -70,7 +74,12 @@ public class MainActivity extends GameActivity {
     class OnFire implements InterfaceSpriteButtonDownListener {
         @Override
         public boolean onDown(MotionEvent e) {
-            return false;
+            Rocket rocket = new Rocket();
+            rocket.setX(player.getX() + player.getWidth() / 2);
+            rocket.setY(player.getY() - rocket.getHeight());
+            setSpeed(rocket, e.getX(), e.getY(), 10F);
+            drawSprite.addSprite(1, rocket);
+            return true;
         }
     }
 
@@ -102,15 +111,15 @@ public class MainActivity extends GameActivity {
         }
     }
 
-    class Fireball extends SpriteAnimation implements InterfaceSpriteCollisionTarget {
+    class Fireball extends SpriteRunnerAnimation implements InterfaceSpriteCollisionTarget {
         public Fireball() {
-            setAnimation(createAnimationP(new int[] {R.drawable.fireball1_0, R.drawable.fireball1_1}, new int[] {100, 100}, 0F, 0.1F));
+            setAnimation(createAnimationP(new int[] {R.drawable.fireball1_0, R.drawable.fireball1_1}, new int[] {100, 100}, 0F, 0.05F));
         }
     }
 
-    class Rocket extends SpriteAnimation implements InterfaceSpriteCollisionTarget {
+    class Rocket extends SpriteRunnerAnimation implements InterfaceSpriteCollisionTarget {
         public Rocket() {
-            setAnimation(createAnimationP(new int[] {R.drawable.rocket_1_0, R.drawable.rocket_1_1}, new int[] {100, 100}, 0F, 0.1F));
+            setAnimation(createAnimationP(new int[] {R.drawable.rocket_1_0, R.drawable.rocket_1_1}, new int[] {100, 100}, 0F, 0.05F));
         }
     }
 
