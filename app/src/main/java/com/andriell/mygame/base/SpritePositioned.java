@@ -48,6 +48,16 @@ public class SpritePositioned implements InterfaceSpritePositioned {
     }
 
     @Override
+    public float getCenterX() {
+        return x + width / 2;
+    }
+
+    @Override
+    public float getCenterY() {
+        return y + height / 2;
+    }
+
+    @Override
     public void setX(float x) {
         this.x = x;
     }
@@ -55,5 +65,15 @@ public class SpritePositioned implements InterfaceSpritePositioned {
     @Override
     public void setY(float y) {
         this.y = y;
+    }
+
+    @Override
+    public void setCenterX(float x) {
+        this.x = x - width / 2;
+    }
+
+    @Override
+    public void setCenterY(float y) {
+        this.y = y - height / 2;
     }
 }

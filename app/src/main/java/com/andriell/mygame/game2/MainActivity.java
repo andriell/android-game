@@ -2,6 +2,7 @@ package com.andriell.mygame.game2;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -14,6 +15,8 @@ import com.andriell.mygame.base.InterfaceSpriteButtonDownListener;
 import com.andriell.mygame.base.InterfaceSpriteButtonUpListener;
 import com.andriell.mygame.base.InterfaceSpriteCollisionListener;
 import com.andriell.mygame.base.InterfaceSpriteCollisionTarget;
+import com.andriell.mygame.base.SpriteAnimation;
+import com.andriell.mygame.base.SpriteAnimationLimited;
 import com.andriell.mygame.base.SpriteButtonClear;
 import com.andriell.mygame.base.SpriteProgressBarRect;
 import com.andriell.mygame.base.SpriteRunnerAnimation;
@@ -25,6 +28,7 @@ public class MainActivity extends GameActivity {
     DrawSprite drawSprite;
     Player player;
     SpriteProgressBarRect liveProgressBar;
+    SpriteProgressBarRect reloadProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,13 @@ public class MainActivity extends GameActivity {
         player = new Player();
         setPositionPBL(player, 0.01F, 0.5F, ALIGN_CENTER, ALIGN_BOTTOM);
         drawSprite.addSprite(1, player);
+
+        reloadProgressBar = new SpriteProgressBarRect();
+        reloadProgressBar.setColorValue(Color.BLUE);
+        reloadProgressBar.setValue(1F);
+        setSizeP(reloadProgressBar, 0.8F, 0.01F);
+        setPositionPTL(reloadProgressBar, 0.03F, 0.1F);
+        drawSprite.addSprite(2, reloadProgressBar);
 
         liveProgressBar = new SpriteProgressBarRect();
         liveProgressBar.setValue(1F);
@@ -81,12 +92,30 @@ public class MainActivity extends GameActivity {
         setContentView(drawSprite);
     }
 
+    class Explosion extends SpriteAnimationLimited {
+        private Animation a;
+
+        public Explosion(float x, float y) {
+            if (a == null) {
+                a = createAnimationP(new int[] {R.drawable.explosion1, R.drawable.explosion2}, new int[] {100, 100}, 0F, 0.05F);
+            }
+            setAnimation(a);
+            setTimeLimit(500);
+            setCenterX(x);
+            setCenterY(y);
+        }
+    }
+
     class OnFire implements InterfaceSpriteButtonUpListener, InterfaceSpriteButtonDownListener {
         @Override
         public boolean onDown(MotionEvent e) {
+            if (reloadProgressBar.getValue() < 1) {
+                return true;
+            }
+            reloadProgressBar.setValue(0F);
             int index = e.getActionIndex();
             Rocket rocket = new Rocket();
-            rocket.setX(player.getX() + player.getWidth() / 2);
+            rocket.setX(player.getCenterX());
             rocket.setY(player.getY() - rocket.getHeight());
             setSpeed(rocket, e.getX(index), e.getY(index), 10F);
             drawSprite.addSprite(1, rocket);
@@ -206,9 +235,9 @@ public class MainActivity extends GameActivity {
                 public void run() {
                     if (isRun && live > 0) {
                         Fireball fireball = new Fireball();
-                        fireball.setX(getX() + getWidth() / 2);
-                        fireball.setY(getY() + fireball.getHeight());
-                        setSpeed(fireball, player.getX() + player.getWidth(), player.getY(), 10F);
+                        fireball.setCenterX(getX());
+                        fireball.setY(getY() + getHeight());
+                        setSpeed(fireball, player.getCenterX(), player.getCenterY(), 10F);
                         drawSprite.addSprite(1, fireball);
                     }
                     handler.postDelayed(this, rnd.nextInt(4000));
@@ -222,6 +251,7 @@ public class MainActivity extends GameActivity {
                 Rocket rocket = (Rocket) sprite;
                 live -= rocket.getDamage();
                 rocket.setLive(-live);
+                drawSprite.addSprite(1, new Explosion(rocket.getCenterX(), rocket.getY()));
             }
             return false;
         }
@@ -267,6 +297,13 @@ public class MainActivity extends GameActivity {
         @Override
         public boolean onDraw(Canvas c) {
             super.onDraw(c);
+            float reload = reloadProgressBar.getValue();
+            reload += 0.1F;
+            if (reload > 1) {
+                reload = 1F;
+            }
+            reloadProgressBar.setValue(reload);
+
             if (x <= 0) {
                 setX(1F);
                 setSpeedX(0F);
@@ -284,6 +321,7 @@ public class MainActivity extends GameActivity {
                 live -= fireball.getDamage();
                 liveProgressBar.setValue(live / liveMax);
                 fireball.setLive(-live);
+                drawSprite.addSprite(1, new Explosion(fireball.getCenterX(), fireball.getY()));
             }
             return false;
         }

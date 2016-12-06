@@ -73,6 +73,16 @@ public class SpriteText implements InterfaceSpritePositioned {
     }
 
     @Override
+    public void setCenterX(float x) {
+        this.x = x - getWidth() / 2;
+    }
+
+    @Override
+    public void setCenterY(float y) {
+        this.y = y - getHeight() / 2;
+    }
+
+    @Override
     public float getX() {
         return x;
     }
@@ -102,5 +112,15 @@ public class SpriteText implements InterfaceSpritePositioned {
             return paint.getTextSize();
         }
         return paint.getTextSize() * text.length();
+    }
+
+    @Override
+    public float getCenterX() {
+        return getX() + getWidth() / 2;
+    }
+
+    @Override
+    public float getCenterY() {
+        return getY() + getHeight() / 2;
     }
 }
