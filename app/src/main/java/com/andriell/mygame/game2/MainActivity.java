@@ -13,14 +13,15 @@ import com.andriell.mygame.base.InterfaceSpriteButtonDownListener;
 import com.andriell.mygame.base.InterfaceSpriteButtonUpListener;
 import com.andriell.mygame.base.InterfaceSpriteCollisionListener;
 import com.andriell.mygame.base.InterfaceSpriteCollisionTarget;
-import com.andriell.mygame.base.SpriteAnimation;
 import com.andriell.mygame.base.SpriteButtonClear;
+import com.andriell.mygame.base.SpriteProgressBarRect;
 import com.andriell.mygame.base.SpriteRunnerAnimation;
 import com.andriell.mygame.base.SpriteSheetBitmap;
 
 public class MainActivity extends GameActivity {
     DrawSprite drawSprite;
     Player player;
+    SpriteProgressBarRect live;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,11 @@ public class MainActivity extends GameActivity {
         player = new Player();
         setPositionPBL(player, 0.01F, 0.5F, ALIGN_CENTER, ALIGN_BOTTOM);
         drawSprite.addSprite(1, player);
+
+        live = new SpriteProgressBarRect();
+        setSizeP(live, 0.8F, 0.01F);
+        setPositionPTL(live, 0.01F, 0.1F);
+        drawSprite.addSprite(2, live);
 
         OnLeft toLeft = new OnLeft();
         SpriteButtonClear buttonLeft = new SpriteButtonClear();
