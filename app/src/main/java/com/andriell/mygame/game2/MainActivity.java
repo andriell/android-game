@@ -68,7 +68,7 @@ public class MainActivity extends GameActivity {
 
         OnLeft toLeft = new OnLeft();
         SpriteButtonClear buttonLeft = new SpriteButtonClear();
-        setSizeP(buttonLeft, 0.5F, 0.2F);
+        setSizeP(buttonLeft, 0.5F, 0.3F);
         setPositionPBL(buttonLeft, 0F, 0F);
         buttonLeft.setDownListener(toLeft);
         buttonLeft.setUpListener(toLeft);
@@ -76,7 +76,7 @@ public class MainActivity extends GameActivity {
 
         OnRight toRight = new OnRight();
         SpriteButtonClear buttonRight = new SpriteButtonClear();
-        setSizeP(buttonRight, 0.5F, 0.2F);
+        setSizeP(buttonRight, 0.5F, 0.3F);
         setPositionPBR(buttonRight, 0F, 0F);
         buttonRight.setDownListener(toRight);
         buttonRight.setUpListener(toRight);
@@ -84,7 +84,7 @@ public class MainActivity extends GameActivity {
 
         OnFire onFire = new OnFire();
         SpriteButtonClear buttonFire = new SpriteButtonClear();
-        setSizeP(buttonFire, 1F, 0.8F);
+        setSizeP(buttonFire, 1F, 0.7F);
         setPositionPTL(buttonFire, 0F, 0F);
         buttonFire.setDownListener(onFire);
         drawSprite.addSprite(2, buttonFire);
