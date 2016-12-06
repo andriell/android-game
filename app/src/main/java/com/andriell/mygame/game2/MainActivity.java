@@ -3,6 +3,7 @@ package com.andriell.mygame.game2;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MotionEvent;
 
 import com.andriell.mygame.R;
@@ -18,10 +19,12 @@ import com.andriell.mygame.base.SpriteProgressBarRect;
 import com.andriell.mygame.base.SpriteRunnerAnimation;
 import com.andriell.mygame.base.SpriteSheetBitmap;
 
+import java.util.Random;
+
 public class MainActivity extends GameActivity {
     DrawSprite drawSprite;
     Player player;
-    SpriteProgressBarRect live;
+    SpriteProgressBarRect liveProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +49,11 @@ public class MainActivity extends GameActivity {
         setPositionPBL(player, 0.01F, 0.5F, ALIGN_CENTER, ALIGN_BOTTOM);
         drawSprite.addSprite(1, player);
 
-        live = new SpriteProgressBarRect();
-        setSizeP(live, 0.8F, 0.01F);
-        setPositionPTL(live, 0.01F, 0.1F);
-        drawSprite.addSprite(2, live);
+        liveProgressBar = new SpriteProgressBarRect();
+        liveProgressBar.setValue(1F);
+        setSizeP(liveProgressBar, 0.8F, 0.01F);
+        setPositionPTL(liveProgressBar, 0.01F, 0.1F);
+        drawSprite.addSprite(2, liveProgressBar);
 
         OnLeft toLeft = new OnLeft();
         SpriteButtonClear buttonLeft = new SpriteButtonClear();
@@ -124,29 +128,116 @@ public class MainActivity extends GameActivity {
     }
 
     class Fireball extends SpriteRunnerAnimation implements InterfaceSpriteCollisionTarget {
+        private float damage = 10F;
+        private float live = 10F;
+
         public Fireball() {
             setAnimation(createAnimationP(new int[] {R.drawable.fireball1_0, R.drawable.fireball1_1}, new int[] {100, 100}, 0F, 0.05F));
+        }
+
+        public float getDamage() {
+            return damage;
+        }
+
+        public void setDamage(float damage) {
+            this.damage = damage;
+        }
+
+        public float getLive() {
+            return live;
+        }
+
+        public void setLive(float live) {
+            this.live = live;
+        }
+
+        @Override
+        public boolean onDraw(Canvas c) {
+            if (live <= 0) {
+                return false;
+            }
+            return super.onDraw(c);
         }
     }
 
     class Rocket extends SpriteRunnerAnimation implements InterfaceSpriteCollisionTarget {
+        private float damage = 10F;
+        private float live = 10F;
         public Rocket() {
             setAnimation(createAnimationP(new int[] {R.drawable.rocket_1_0, R.drawable.rocket_1_1}, new int[] {100, 100}, 0F, 0.05F));
+        }
+
+        public float getDamage() {
+            return damage;
+        }
+
+        public void setDamage(float damage) {
+            this.damage = damage;
+        }
+
+        @Override
+        public boolean onDraw(Canvas c) {
+            if (live <= 0) {
+                return false;
+            }
+            return super.onDraw(c);
+        }
+
+        public float getLive() {
+            return live;
+        }
+
+        public void setLive(float live) {
+            this.live = live;
         }
     }
 
     class Fly extends SpriteRunnerAnimation implements InterfaceSpriteCollisionListener {
+        private float live = 1000;
+        private Handler handler;
+        private Random rnd;
         public Fly() {
             setAnimation(createAnimationP(new int[] {R.drawable.fly_1_0, R.drawable.fly_1_1}, new int[] {100, 100}, 0F, 0.1F));
+
+            handler = new Handler();
+            rnd = new Random();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (isRun && live > 0) {
+                        Fireball fireball = new Fireball();
+                        fireball.setX(getX() + getWidth() / 2);
+                        fireball.setY(getY() + fireball.getHeight());
+                        setSpeed(fireball, player.getX() + player.getWidth(), player.getY(), 10F);
+                        drawSprite.addSprite(1, fireball);
+                    }
+                    handler.postDelayed(this, rnd.nextInt(4000));
+                }
+            });
         }
 
         @Override
         public boolean onCollision(InterfaceSpriteCollisionTarget sprite) {
+            if (sprite instanceof Rocket) {
+                Rocket rocket = (Rocket) sprite;
+                live -= rocket.getDamage();
+                rocket.setLive(-live);
+            }
             return false;
+        }
+
+        @Override
+        public boolean onDraw(Canvas c) {
+            if (live <= 0) {
+                return false;
+            }
+            return super.onDraw(c);
         }
     }
 
     class Player extends SpriteRunnerAnimation implements InterfaceSpriteCollisionListener {
+        float live = 1000F;
+        float liveMax = 1000F;
         Animation animationNormal;
         Animation animationLeft;
         Animation animationRight;
@@ -188,6 +279,12 @@ public class MainActivity extends GameActivity {
 
         @Override
         public boolean onCollision(InterfaceSpriteCollisionTarget sprite) {
+            if (sprite instanceof Fireball) {
+                Fireball fireball = (Fireball) sprite;
+                live -= fireball.getDamage();
+                liveProgressBar.setValue(live / liveMax);
+                fireball.setLive(-live);
+            }
             return false;
         }
     }
