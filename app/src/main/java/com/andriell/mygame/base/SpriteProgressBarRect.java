@@ -89,6 +89,15 @@ public class SpriteProgressBarRect extends SpriteResize {
         }
     }
 
+    public void addValue(float value) {
+        this.value += value;
+        if (this.value > 1) {
+            this.value = 1F;
+        } else if (this.value < 0F) {
+            this.value = 0F;
+        }
+    }
+
     public boolean isHorizontal() {
         return horizontal;
     }

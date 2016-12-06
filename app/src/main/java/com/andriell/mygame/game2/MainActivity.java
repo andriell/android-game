@@ -300,13 +300,7 @@ public class MainActivity extends GameActivity {
         @Override
         public boolean onDraw(Canvas c) {
             super.onDraw(c);
-            float reload = reloadProgressBar.getValue();
-            reload += 0.01F;
-            if (reload > 1) {
-                reload = 1F;
-            }
-            reloadProgressBar.setValue(reload);
-
+            reloadProgressBar.addValue(0.01F);
             if (x <= 0) {
                 setX(1F);
                 setSpeedX(0F);
@@ -322,9 +316,6 @@ public class MainActivity extends GameActivity {
             if (sprite instanceof Fireball) {
                 Fireball fireball = (Fireball) sprite;
                 live -= fireball.getDamage();
-                if (live < 0F) {
-                    live = 0F;
-                }
                 liveProgressBar.setValue(live / liveMax);
                 fireball.setLive(-live);
                 drawSprite.addSprite(1, new Explosion(fireball.getCenterX(), fireball.getY()));
