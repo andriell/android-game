@@ -3,6 +3,7 @@ package com.andriell.mygame.game2;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -252,6 +253,8 @@ public class MainActivity extends GameActivity {
                 live -= rocket.getDamage();
                 rocket.setLive(-live);
                 drawSprite.addSprite(1, new Explosion(rocket.getCenterX(), rocket.getY()));
+                MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.grenade);
+                mediaPlayer.start();
             }
             return false;
         }
@@ -298,7 +301,7 @@ public class MainActivity extends GameActivity {
         public boolean onDraw(Canvas c) {
             super.onDraw(c);
             float reload = reloadProgressBar.getValue();
-            reload += 0.1F;
+            reload += 0.01F;
             if (reload > 1) {
                 reload = 1F;
             }
@@ -319,6 +322,9 @@ public class MainActivity extends GameActivity {
             if (sprite instanceof Fireball) {
                 Fireball fireball = (Fireball) sprite;
                 live -= fireball.getDamage();
+                if (live < 0F) {
+                    live = 0F;
+                }
                 liveProgressBar.setValue(live / liveMax);
                 fireball.setLive(-live);
                 drawSprite.addSprite(1, new Explosion(fireball.getCenterX(), fireball.getY()));

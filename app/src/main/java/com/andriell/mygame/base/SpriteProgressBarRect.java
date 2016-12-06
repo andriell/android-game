@@ -80,7 +80,13 @@ public class SpriteProgressBarRect extends SpriteResize {
     }
 
     public void setValue(float value) {
-        this.value = value;
+        if (value > 1) {
+            this.value = 1F;
+        } else if (value < 0F) {
+            this.value = 0F;
+        } else {
+            this.value = value;
+        }
     }
 
     public boolean isHorizontal() {
