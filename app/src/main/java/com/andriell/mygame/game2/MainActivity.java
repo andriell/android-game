@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.andriell.mygame.R;
@@ -33,11 +34,14 @@ public class MainActivity extends GameActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("load", "0");
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        Log.i("load", "1");
         super.onCreate(savedInstanceState);
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+        Log.i("load", "2");
         drawSprite = new DrawSprite(this, 3);
+        setContentView(drawSprite);
 
         SpriteSheetBitmap stars = new SpriteSheetBitmap();
         setSizeP(stars, 1F, 1F);
@@ -45,7 +49,7 @@ public class MainActivity extends GameActivity {
         stars.setBitmap(createBitmapP(R.drawable.stars1));
         stars.setSpeedY(yP(0.001F));
         drawSprite.addSprite(0, stars);
-
+        Log.i("load", "3");
         Fly fly = new Fly();
         setPositionPTL(fly, 0.2F, 0.5F, ALIGN_CENTER, ALIGN_CENTER);
         drawSprite.addSprite(1, fly);
@@ -66,7 +70,7 @@ public class MainActivity extends GameActivity {
         setSizeP(liveProgressBar, 0.8F, 0.01F);
         setPositionPTL(liveProgressBar, 0.01F, 0.1F);
         drawSprite.addSprite(2, liveProgressBar);
-
+        Log.i("load", "4");
         OnLeft toLeft = new OnLeft();
         SpriteButtonClear buttonLeft = new SpriteButtonClear();
         setSizeP(buttonLeft, 0.5F, 0.3F);
@@ -74,7 +78,7 @@ public class MainActivity extends GameActivity {
         buttonLeft.setDownListener(toLeft);
         buttonLeft.setUpListener(toLeft);
         drawSprite.addSprite(2, buttonLeft);
-
+        Log.i("load", "5");
         OnRight toRight = new OnRight();
         SpriteButtonClear buttonRight = new SpriteButtonClear();
         setSizeP(buttonRight, 0.5F, 0.3F);
@@ -89,8 +93,9 @@ public class MainActivity extends GameActivity {
         setPositionPTL(buttonFire, 0F, 0F);
         buttonFire.setDownListener(onFire);
         drawSprite.addSprite(2, buttonFire);
+        Log.i("load", "6");
 
-        setContentView(drawSprite);
+        Log.i("load", "100");
     }
 
     class Explosion extends SpriteAnimationLimited {

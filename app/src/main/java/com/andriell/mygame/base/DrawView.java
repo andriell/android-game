@@ -6,39 +6,39 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public abstract class DrawView extends SurfaceView {
 
+public abstract class DrawView extends SurfaceView implements SurfaceHolder.Callback {
     private DrawThread drawThread;
 
     public DrawView(Context context) {
         super(context);
-        getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width,
-                                       int height) {
+        getHolder().addCallback(this);
+    }
 
-            }
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width,
+                               int height) {
 
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                drawThread = new DrawThread(getHolder());
-                drawThread.setRunning(true);
-                drawThread.start();
-            }
+    }
 
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                boolean retry = true;
-                drawThread.setRunning(false);
-                while (retry) {
-                    try {
-                        drawThread.join();
-                        retry = false;
-                    } catch (InterruptedException ignored) {
-                    }
-                }
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        drawThread = new DrawThread(getHolder());
+        drawThread.setRunning(true);
+        drawThread.start();
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        boolean retry = true;
+        drawThread.setRunning(false);
+        while (retry) {
+            try {
+                drawThread.join();
+                retry = false;
+            } catch (InterruptedException ignored) {
             }
-        });
+        }
     }
 
     class DrawThread extends Thread {
@@ -46,23 +46,24 @@ public abstract class DrawView extends SurfaceView {
         private boolean running = false;
         private SurfaceHolder surfaceHolder;
 
-        DrawThread(SurfaceHolder surfaceHolder) {
+        public DrawThread(SurfaceHolder surfaceHolder) {
             this.surfaceHolder = surfaceHolder;
         }
 
-        void setRunning(boolean running) {
+        public void setRunning(boolean running) {
             this.running = running;
         }
 
         @Override
         public void run() {
-            Canvas canvas = null;
+            Canvas canvas;
             while (running) {
+                canvas = null;
                 try {
                     canvas = surfaceHolder.lockCanvas(null);
                     if (canvas == null) {
                         Log.e("GameView", "onDraw canvas == null");
-                        return;
+                        continue;
                     }
                     synchronized (surfaceHolder) {
                         myDraw(canvas);
