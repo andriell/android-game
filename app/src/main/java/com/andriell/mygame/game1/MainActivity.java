@@ -2,21 +2,17 @@ package com.andriell.mygame.game1;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 
 import com.andriell.mygame.R;
 import com.andriell.mygame.base.Animation;
+import com.andriell.mygame.base.DrawView;
 import com.andriell.mygame.base.GameActivity;
 import com.andriell.mygame.base.InterfaceSpriteCollisionTarget;
 import com.andriell.mygame.base.SpriteColor;
 import com.andriell.mygame.base.DrawSprite;
-import com.andriell.mygame.game1.Bullet;
-import com.andriell.mygame.game1.Count;
-import com.andriell.mygame.game1.Monster;
-import com.andriell.mygame.game1.Player;
 
 import java.util.Random;
 
@@ -33,10 +29,17 @@ public class MainActivity extends GameActivity {
     Count count;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void init() {
 
+    }
 
+    @Override
+    protected DrawView preload() {
+        return null;
+    }
+
+    @Override
+    protected DrawView game() {
         bitmapPlayer = createBitmapP(R.drawable.player, 0.12F);
         bitmapBullet = createBitmapP(R.drawable.bullet, 0.035F);
 
@@ -93,5 +96,6 @@ public class MainActivity extends GameActivity {
                 handler.postDelayed(this, rnd.nextInt(10000));
             }
         });
+        return drawSprite;
     }
 }

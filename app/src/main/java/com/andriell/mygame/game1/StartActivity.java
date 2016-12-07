@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
+import com.andriell.mygame.base.DrawView;
 import com.andriell.mygame.base.InterfaceSpriteButtonDownListener;
 import com.andriell.mygame.base.InterfaceSpriteButtonUpListener;
 import com.andriell.mygame.game2.MainActivity;
@@ -15,10 +16,19 @@ import com.andriell.mygame.base.SpriteButtonBitmap;
 import com.andriell.mygame.base.SpriteColor;
 
 public class StartActivity extends GameActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
+    @Override
+    protected void init() {
+
+    }
+
+    @Override
+    protected DrawView preload() {
+        return null;
+    }
+
+    @Override
+    protected DrawView game() {
         DrawSprite drawSprite = new DrawSprite(this, 2);
         drawSprite.addSprite(0, new SpriteColor(Color.WHITE));
 
@@ -33,7 +43,6 @@ public class StartActivity extends GameActivity {
             }
         });
         drawSprite.addSprite(1, spriteButtonBitmap);
-
-        setContentView(drawSprite);
+        return drawSprite;
     }
 }

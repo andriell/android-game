@@ -4,20 +4,20 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.andriell.mygame.R;
 import com.andriell.mygame.base.Animation;
+import com.andriell.mygame.base.DrawPreload;
 import com.andriell.mygame.base.DrawSprite;
+import com.andriell.mygame.base.DrawView;
 import com.andriell.mygame.base.GameActivity;
 import com.andriell.mygame.base.InterfaceSpriteButtonDownListener;
 import com.andriell.mygame.base.InterfaceSpriteButtonUpListener;
 import com.andriell.mygame.base.InterfaceSpriteCollisionListener;
 import com.andriell.mygame.base.InterfaceSpriteCollisionTarget;
-import com.andriell.mygame.base.SpriteAnimation;
 import com.andriell.mygame.base.SpriteAnimationLimited;
 import com.andriell.mygame.base.SpriteButtonClear;
 import com.andriell.mygame.base.SpriteProgressBarRect;
@@ -31,17 +31,26 @@ public class MainActivity extends GameActivity {
     Player player;
     SpriteProgressBarRect liveProgressBar;
     SpriteProgressBarRect reloadProgressBar;
+    DrawPreload preload;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Log.i("load", "0");
+    protected void init() {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        Log.i("load", "1");
-        super.onCreate(savedInstanceState);
+    }
 
-        Log.i("load", "2");
+    @Override
+    protected View preload() {
+        preload = new DrawPreload(this, displaySize.x, displaySize.y);
+        preload.setMaxValue(9);
+        return preload;
+    }
+
+    @Override
+    protected DrawView game() {
+        preload.setValue(0);
+
         drawSprite = new DrawSprite(this, 3);
-        setContentView(drawSprite);
+        preload.setValue(1);
 
         SpriteSheetBitmap stars = new SpriteSheetBitmap();
         setSizeP(stars, 1F, 1F);
@@ -49,14 +58,17 @@ public class MainActivity extends GameActivity {
         stars.setBitmap(createBitmapP(R.drawable.stars1));
         stars.setSpeedY(yP(0.001F));
         drawSprite.addSprite(0, stars);
-        Log.i("load", "3");
+        preload.setValue(2);
+
         Fly fly = new Fly();
         setPositionPTL(fly, 0.2F, 0.5F, ALIGN_CENTER, ALIGN_CENTER);
         drawSprite.addSprite(1, fly);
+        preload.setValue(3);
 
         player = new Player();
         setPositionPBL(player, 0.01F, 0.5F, ALIGN_CENTER, ALIGN_BOTTOM);
         drawSprite.addSprite(1, player);
+        preload.setValue(4);
 
         reloadProgressBar = new SpriteProgressBarRect();
         reloadProgressBar.setColorValue(Color.BLUE);
@@ -64,13 +76,15 @@ public class MainActivity extends GameActivity {
         setSizeP(reloadProgressBar, 0.8F, 0.01F);
         setPositionPTL(reloadProgressBar, 0.03F, 0.1F);
         drawSprite.addSprite(2, reloadProgressBar);
+        preload.setValue(5);
 
         liveProgressBar = new SpriteProgressBarRect();
         liveProgressBar.setValue(1F);
         setSizeP(liveProgressBar, 0.8F, 0.01F);
         setPositionPTL(liveProgressBar, 0.01F, 0.1F);
         drawSprite.addSprite(2, liveProgressBar);
-        Log.i("load", "4");
+        preload.setValue(6);
+
         OnLeft toLeft = new OnLeft();
         SpriteButtonClear buttonLeft = new SpriteButtonClear();
         setSizeP(buttonLeft, 0.5F, 0.3F);
@@ -78,7 +92,8 @@ public class MainActivity extends GameActivity {
         buttonLeft.setDownListener(toLeft);
         buttonLeft.setUpListener(toLeft);
         drawSprite.addSprite(2, buttonLeft);
-        Log.i("load", "5");
+        preload.setValue(7);
+
         OnRight toRight = new OnRight();
         SpriteButtonClear buttonRight = new SpriteButtonClear();
         setSizeP(buttonRight, 0.5F, 0.3F);
@@ -86,6 +101,7 @@ public class MainActivity extends GameActivity {
         buttonRight.setDownListener(toRight);
         buttonRight.setUpListener(toRight);
         drawSprite.addSprite(2, buttonRight);
+        preload.setValue(8);
 
         OnFire onFire = new OnFire();
         SpriteButtonClear buttonFire = new SpriteButtonClear();
@@ -93,9 +109,9 @@ public class MainActivity extends GameActivity {
         setPositionPTL(buttonFire, 0F, 0F);
         buttonFire.setDownListener(onFire);
         drawSprite.addSprite(2, buttonFire);
-        Log.i("load", "6");
+        preload.setValue(9);
 
-        Log.i("load", "100");
+        return drawSprite;
     }
 
     class Explosion extends SpriteAnimationLimited {

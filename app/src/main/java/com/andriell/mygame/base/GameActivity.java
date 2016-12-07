@@ -1,18 +1,18 @@
 package com.andriell.mygame.base;
 
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 /**
  * Created by Андрей on 02.12.2016.
  */
-public class GameActivity extends Activity {
+public abstract class GameActivity extends Activity {
     public static final int ALIGN_TOP = 0;
     public static final int ALIGN_RIGHT = 1;
     public static final int ALIGN_BOTTOM = 2;
@@ -48,11 +48,28 @@ public class GameActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         // если хотим, чтобы приложение постоянно имело портретную ориентацию
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
         getWindowManager().getDefaultDisplay().getSize(displaySize);
 
+        init();
+
         super.onCreate(savedInstanceState);
+
+        View drawView = preload();
+        if (drawView != null) {
+            setContentView(drawView);
+        }
+
+        drawView = game();
+        if (drawView != null) {
+            setContentView(drawView);
+        }
     }
+
+    protected abstract void init();
+
+    protected abstract View preload();
+
+    protected abstract View game();
 
     //<editor-fold desc="widthP heightP">
     public float xP(float p) {
@@ -164,12 +181,15 @@ public class GameActivity extends Activity {
     public void setPositionPTR(InterfaceSpritePositioned material, float top, float right, final int align1) {
         setPositionP(material, top, right, -1F, -1F, align1, ALIGN_CENTER);
     }
+
     public void setPositionPBR(InterfaceSpritePositioned material, float bottom, float right, final int align1) {
         setPositionP(material, -1F, right, bottom, -1F, align1, ALIGN_CENTER);
     }
+
     public void setPositionPTL(InterfaceSpritePositioned material, float top, float left, final int align1) {
         setPositionP(material, top, -1F, -1F, left, align1, ALIGN_CENTER);
     }
+
     public void setPositionPBL(InterfaceSpritePositioned material, float bottom, float left, final int align1) {
         setPositionP(material, -1F, -1F, bottom, left, align1, ALIGN_CENTER);
     }
@@ -177,12 +197,15 @@ public class GameActivity extends Activity {
     public void setPositionPTR(InterfaceSpritePositioned material, float top, float right, final int align1, final int align2) {
         setPositionP(material, top, right, -1F, -1F, align1, align2);
     }
+
     public void setPositionPBR(InterfaceSpritePositioned material, float bottom, float right, final int align1, final int align2) {
         setPositionP(material, -1F, right, bottom, -1F, align1, align2);
     }
+
     public void setPositionPTL(InterfaceSpritePositioned material, float top, float left, final int align1, final int align2) {
         setPositionP(material, top, -1F, -1F, left, align1, align2);
     }
+
     public void setPositionPBL(InterfaceSpritePositioned material, float bottom, float left, final int align1, final int align2) {
         setPositionP(material, -1F, -1F, bottom, left, align1, align2);
     }
@@ -190,12 +213,15 @@ public class GameActivity extends Activity {
     public void setPositionPTR(InterfaceSpritePositioned material, float top, float right) {
         setPositionP(material, top, right, -1F, -1F, ALIGN_RIGHT, ALIGN_TOP);
     }
+
     public void setPositionPBR(InterfaceSpritePositioned material, float bottom, float right) {
         setPositionP(material, -1F, right, bottom, -1F, ALIGN_RIGHT, ALIGN_BOTTOM);
     }
+
     public void setPositionPTL(InterfaceSpritePositioned material, float top, float left) {
         setPositionP(material, top, -1F, -1F, left, ALIGN_LEFT, ALIGN_TOP);
     }
+
     public void setPositionPBL(InterfaceSpritePositioned material, float bottom, float left) {
         setPositionP(material, -1F, -1F, bottom, left, ALIGN_LEFT, ALIGN_BOTTOM);
     }
@@ -203,6 +229,7 @@ public class GameActivity extends Activity {
     public void setPositionP(InterfaceSpritePositioned material, float top, float right, float bottom, float left) {
         setPositionP(material, top, right, bottom, left, ALIGN_CENTER, ALIGN_CENTER);
     }
+
     public void setPositionP(InterfaceSpritePositioned material, float top, float right, float bottom, float left, final int align1, final int align2) {
         if (right >= 0) {
             if (align1 == ALIGN_LEFT || align2 == ALIGN_LEFT) {
