@@ -20,9 +20,11 @@ import com.andriell.mygame.base.InterfaceSpriteCollisionListener;
 import com.andriell.mygame.base.InterfaceSpriteCollisionTarget;
 import com.andriell.mygame.base.SpriteAnimation;
 import com.andriell.mygame.base.SpriteAnimationLimited;
+import com.andriell.mygame.base.SpriteBitmap;
 import com.andriell.mygame.base.SpriteButtonClear;
 import com.andriell.mygame.base.SpriteGroup;
 import com.andriell.mygame.base.SpriteProgressBarRect;
+import com.andriell.mygame.base.SpriteRouteLissajous;
 import com.andriell.mygame.base.SpriteRunnerAnimation;
 import com.andriell.mygame.base.SpriteSheetBitmap;
 
@@ -63,8 +65,15 @@ public class MainActivity extends GameActivity {
         preload.setValue(2);
 
         Fly fly = new Fly();
-        setPositionPTL(fly, 0.2F, 0.5F, ALIGN_CENTER, ALIGN_CENTER);
-        drawSprite.addSprite(1, fly);
+        //setPositionPTL(fly, 0.2F, 0.5F, ALIGN_CENTER, ALIGN_CENTER);
+        SpriteRouteLissajous lissajous = new SpriteRouteLissajous(1);
+        lissajous.setSpeed(1);
+        lissajous.add(0, fly, 0);
+        lissajous.setX(0);
+        lissajous.setY(0);
+        lissajous.setCircleY(2);
+        setSizeP(lissajous, 0.8F, 0.5F);
+        drawSprite.addSprite(1, lissajous);
         preload.setValue(3);
 
         player = new Player();
