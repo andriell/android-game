@@ -308,11 +308,7 @@ public class MainActivity extends GameActivity {
 
         @Override
         public boolean onDraw(Canvas c) {
-            if (live <= 0) {
-                destroy();
-                return false;
-            }
-            return super.onDraw(c);
+            return live > 0 && super.onDraw(c);
         }
     }
 

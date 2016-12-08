@@ -123,18 +123,7 @@ public class SpriteGroup implements InterfaceSpriteGroup {
             sprites[i].setY(y + spriteY[i]);
             sprites[i].onDraw(c);
         }
-        if (x < -width || y < -height || x > c.getWidth() || y > c.getHeight()) {
-            destroy();
-            return false;
-        }
-        return true;
-    }
-
-    public void destroy() {
-        for (int i = 0; i < sprites.length; i++) {
-            sprites[i] = null;
-        }
-        sprites = null;
+        return !(x < -width || y < -height || x > c.getWidth() || y > c.getHeight());
     }
 
     @Override
