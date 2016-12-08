@@ -24,7 +24,7 @@ public class SpritePositioned implements InterfaceSpritePositioned {
 
     @Override
     public boolean onDraw(Canvas c) {
-        return !(x < 0 || y < 0 || x > c.getWidth() || y > c.getHeight());
+        return !(x < -width || y < -height || x > c.getWidth() || y > c.getHeight());
     }
 
     @Override

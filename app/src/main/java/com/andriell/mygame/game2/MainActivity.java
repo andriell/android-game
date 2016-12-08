@@ -18,8 +18,10 @@ import com.andriell.mygame.base.InterfaceSpriteButtonDownListener;
 import com.andriell.mygame.base.InterfaceSpriteButtonUpListener;
 import com.andriell.mygame.base.InterfaceSpriteCollisionListener;
 import com.andriell.mygame.base.InterfaceSpriteCollisionTarget;
+import com.andriell.mygame.base.SpriteAnimation;
 import com.andriell.mygame.base.SpriteAnimationLimited;
 import com.andriell.mygame.base.SpriteButtonClear;
+import com.andriell.mygame.base.SpriteGroup;
 import com.andriell.mygame.base.SpriteProgressBarRect;
 import com.andriell.mygame.base.SpriteRunnerAnimation;
 import com.andriell.mygame.base.SpriteSheetBitmap;
@@ -243,12 +245,28 @@ public class MainActivity extends GameActivity {
         }
     }
 
-    class Fly extends SpriteRunnerAnimation implements InterfaceSpriteCollisionListener {
+    class Fly extends SpriteGroup implements InterfaceSpriteCollisionListener {
         private float live = 1000;
+        private float liveMax = 1000;
+        private SpriteProgressBarRect liveProgressBar;
         private Handler handler;
         private Random rnd;
-        public Fly() {
-            setAnimation(createAnimationP(new int[] {R.drawable.fly_1_0, R.drawable.fly_1_1}, new int[] {100, 100}, 0F, 0.1F));
+
+        public Fly()  {
+            super(2);
+
+            Body body = new Body();
+            add(0, body);
+
+            liveProgressBar = new SpriteProgressBarRect();
+            liveProgressBar.setValue(1);
+            liveProgressBar.setColorValue(Color.YELLOW);
+            liveProgressBar.setColorBackground(Color.BLACK);
+            liveProgressBar.setValue(1F);
+            liveProgressBar.setHeight(5F);
+            liveProgressBar.setWidth(body.getWidth());
+
+            addBottom(0, 1, liveProgressBar, 0F, 5F);
 
             handler = new Handler();
             rnd = new Random();
@@ -267,11 +285,19 @@ public class MainActivity extends GameActivity {
             });
         }
 
+        class Body extends SpriteAnimation {
+
+            public Body() {
+                setAnimation(createAnimationP(new int[] {R.drawable.fly_1_0, R.drawable.fly_1_1}, new int[] {100, 100}, 0F, 0.1F));
+            }
+        }
+
         @Override
         public boolean onCollision(InterfaceSpriteCollisionTarget sprite) {
             if (sprite instanceof Rocket) {
                 Rocket rocket = (Rocket) sprite;
                 live -= rocket.getDamage();
+                liveProgressBar.setValue(live / liveMax);
                 rocket.setLive(-live);
                 drawSprite.addSprite(1, new Explosion(rocket.getCenterX(), rocket.getY()));
                 MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.grenade);

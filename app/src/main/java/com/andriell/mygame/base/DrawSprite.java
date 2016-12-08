@@ -29,10 +29,16 @@ public class DrawSprite extends DrawView {
     }
 
     public void addSprite(int z, InterfaceSprite s) {
+        addSprite(z, s, true);
+    }
+
+    public void addSprite(int z, InterfaceSprite s, boolean isDraw) {
         if (z < 0 || z >= sprites.length) {
             return;
         }
-        sprites[z].add(s);
+        if (isDraw) {
+            sprites[z].add(s);
+        }
         if (s instanceof InterfaceSpriteCollisionListener) {
             spritesCollision.add((InterfaceSpriteCollisionListener) s);
         } else if (s instanceof InterfaceSpriteCollisionTarget) {
@@ -40,6 +46,12 @@ public class DrawSprite extends DrawView {
         }
         if (s instanceof InterfaceSpriteTouchListener) {
             spritesTouchListener.add((InterfaceSpriteTouchListener) s);
+        }
+        if (s instanceof InterfaceSpriteGroup) {
+            InterfaceSpritePositioned[] elements = ((InterfaceSpriteGroup) s).getSprites();
+            for (InterfaceSpritePositioned element: elements) {
+                addSprite(z, element, false);
+            }
         }
     }
 
@@ -54,6 +66,12 @@ public class DrawSprite extends DrawView {
         }
         if (s instanceof InterfaceSpriteTouchListener) {
             spritesTouchListener.remove((InterfaceSpriteTouchListener) s);
+        }
+        if (s instanceof InterfaceSpriteGroup) {
+            InterfaceSpritePositioned[] elements = ((InterfaceSpriteGroup) s).getSprites();
+            for (InterfaceSpritePositioned element: elements) {
+                removeSprite(z, element);
+            }
         }
         sprites[z].remove(s);
     }
