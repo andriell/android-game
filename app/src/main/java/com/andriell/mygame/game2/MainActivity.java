@@ -245,7 +245,7 @@ public class MainActivity extends GameActivity {
         }
     }
 
-    class Fly extends SpriteGroup implements InterfaceSpriteCollisionListener {
+    class Fly extends SpriteGroup {
         private float live = 1000;
         private float liveMax = 1000;
         private SpriteProgressBarRect liveProgressBar;
@@ -261,8 +261,9 @@ public class MainActivity extends GameActivity {
             liveProgressBar = new SpriteProgressBarRect();
             liveProgressBar.setValue(1);
             liveProgressBar.setColorValue(Color.YELLOW);
-            liveProgressBar.setColorBackground(Color.BLACK);
+            liveProgressBar.setColorBackground(Color.GRAY);
             liveProgressBar.setValue(1F);
+            liveProgressBar.setBorder(0);
             liveProgressBar.setHeight(5F);
             liveProgressBar.setWidth(body.getWidth());
 
@@ -285,30 +286,30 @@ public class MainActivity extends GameActivity {
             });
         }
 
-        class Body extends SpriteAnimation {
-
-            public Body() {
+        class Body extends SpriteAnimation implements InterfaceSpriteCollisionListener {
+            Body() {
                 setAnimation(createAnimationP(new int[] {R.drawable.fly_1_0, R.drawable.fly_1_1}, new int[] {100, 100}, 0F, 0.1F));
             }
-        }
 
-        @Override
-        public boolean onCollision(InterfaceSpriteCollisionTarget sprite) {
-            if (sprite instanceof Rocket) {
-                Rocket rocket = (Rocket) sprite;
-                live -= rocket.getDamage();
-                liveProgressBar.setValue(live / liveMax);
-                rocket.setLive(-live);
-                drawSprite.addSprite(1, new Explosion(rocket.getCenterX(), rocket.getY()));
-                MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.grenade);
-                mediaPlayer.start();
+            @Override
+            public boolean onCollision(InterfaceSpriteCollisionTarget sprite) {
+                if (sprite instanceof Rocket) {
+                    Rocket rocket = (Rocket) sprite;
+                    live -= rocket.getDamage();
+                    liveProgressBar.setValue(live / liveMax);
+                    rocket.setLive(-live);
+                    drawSprite.addSprite(1, new Explosion(rocket.getCenterX(), rocket.getY()));
+                    MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.grenade);
+                    mediaPlayer.start();
+                }
+                return false;
             }
-            return false;
         }
 
         @Override
         public boolean onDraw(Canvas c) {
             if (live <= 0) {
+                destroy();
                 return false;
             }
             return super.onDraw(c);
